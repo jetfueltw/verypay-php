@@ -1,6 +1,6 @@
 <?php
 
-namespace Jetfuel\Zsagepay\HttpClient;
+namespace Jetfuel\Verypay\HttpClient;
 
 interface HttpClientInterface
 {

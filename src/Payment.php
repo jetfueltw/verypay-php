@@ -3,22 +3,40 @@
 namespace Jetfuel\Verypay;
 
 use Jetfuel\Verypay\HttpClient\GuzzleHttpClient;
+use Jetfuel\Verypay\Traits\ConvertMoney;
 
 class Payment
 {
+    use ConvertMoney;
     const BASE_API_URL = 'http://139.199.195.194:8080/';
-    const TIME_ZONE    = 'Asia/Shanghai';
-    const TIME_FORMAT  = 'Y-m-d H:i:s';
+    const API_VERSION = 'V3.1.0.0';
+    const CHARSET = 'UTF-8';
+
 
     /**
      * @var string
      */
-    protected $merchantId;
+    protected $merchantNo;
+
+    /**
+     * @var string
+     */
+    protected $md5Key;
 
     /**
      * @var string
      */
     protected $privateKey;
+
+    /**
+     * @var string
+     */
+    protected $payPublicKey;
+
+    /**
+     * @var string
+     */
+    protected $remitPublicKey;
 
     /**
      * @var string
@@ -33,14 +51,20 @@ class Payment
     /**
      * Payment constructor.
      *
-     * @param string $merchantId
+     * @param string $merchantNo
+     * @param string $md5Key for sign
      * @param string $privateKey
+     * @param string $payPublicKey
+     * @param string $remitRublicKey
      * @param string $baseApiUrl
      */
-    protected function __construct($merchantId, $privateKey, $baseApiUrl = null)
+    protected function __construct($merchantNo, $md5Key, $privateKey, $payPublicKey, $remitPublicKey, $baseApiUrl = null)
     {
-        $this->merchantId = $merchantId;
+        $this->merchantNo = $merchantNo;
+        $this->md5Key = $md5Key;
         $this->privateKey = $privateKey;
+        $this->payPublicKey = $payPublicKey;
+        $this->remitPublicKey = $remitPublicKey;
         $this->baseApiUrl = $baseApiUrl === null ? self::BASE_API_URL : $baseApiUrl;
 
         $this->httpClient = new GuzzleHttpClient($this->baseApiUrl);
@@ -54,9 +78,12 @@ class Payment
      */
     protected function signPayload(array $payload)
     {
-        $payload['merchant_code'] = $this->merchantId;
-        $payload['sign'] = Signature::generate($payload, $this->privateKey);
-        $payload['sign_type'] = self::SIGN_TYPE;
+        $payload['merNo'] = $this->merchantNo;
+        $payload['version'] = self::API_VERSION;
+        $payload['charset'] = self::CHARSET;
+        $payload['sign'] = Signature::generate($payload, $this->md5Key);
+        $payload = json_encode($payload,320);
+        echo 'Payload = ' . $payload;
 
         return $payload;
     }

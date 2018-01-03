@@ -1,6 +1,6 @@
 <?php
 
-namespace Jetfuel\Zsagepay;
+namespace Jetfuel\Verypay;
 
 class Signature
 {
@@ -13,9 +13,16 @@ class Signature
      */
     public static function generate(array $payload, $secretKey)
     {
-        $baseString = self::buildBaseString($payload).$secretKey;
+        $baseString = self::buildBaseString($payload);
+        //echo 'BaseString = '. $baseString . '        ';
 
-        return self::md5Hash($baseString);
+        $jsonBaseString = json_encode($baseString,320);
+        echo 'jsonBaseString =' . $jsonBaseString . '       ';
+
+        $sign = self::md5Hash($jsonBaseString . $secretKey);
+        echo 'Sign = ' . $sign. '       ';
+
+        return $sign;
     }
 
     /**
@@ -33,16 +40,17 @@ class Signature
     {
         ksort($payload);
 
-        $baseString = '';
+        /*$baseString = '';
         foreach ($payload as $key => $value) {
             $baseString .= $key.'='.$value.'&';
         }
 
-        return rtrim($baseString, '&');
+        return rtrim($baseString, '&');*/
+        return $payload;
     }
 
     private static function md5Hash($data)
     {
-        return md5($data);
+        return strtoupper(md5($data));
     }
 }

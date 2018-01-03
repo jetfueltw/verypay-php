@@ -1,8 +1,8 @@
 <?php
 
-namespace Jetfuel\Zsagepay;
+namespace Jetfuel\Verypay;
 
-use Jetfuel\Zsagepay\Traits\ResultParser;
+use Jetfuel\Verypay\Traits\ResultParser;
 
 class DigitalPayment extends Payment
 {
@@ -15,9 +15,9 @@ class DigitalPayment extends Payment
      * @param string $secretKey
      * @param null|string $baseApiUrl
      */
-    public function __construct($merchantId, $md5Key, $privateKey, $payPublicKey, $remitPublicKey, $baseApiUrl = null)
+    public function __construct($merchantNo, $md5Key, $privateKey, $payPublicKey, $remitPublicKey, $baseApiUrl = null)
     {
-        parent::__construct($merchantId, $md5Key, $privateKey, $payPublicKey, $remitPublicKey, $baseApiUrl);
+        parent::__construct($merchantNo, $md5Key, $privateKey, $payPublicKey, $remitPublicKey, $baseApiUrl);
     }
 
     /**
@@ -30,21 +30,17 @@ class DigitalPayment extends Payment
      * @param string $notifyUrl
      * @return array
      */
-    public function order($tradeNo, $channel, $amount, $clientIp, $notifyUrl)
+    public function order($tradeNo, $channel, $amount, $clientIp, $goodsName, $notifyUrl, $returnUrl)
     {
         $payload = $this->signPayload([
-            'outOrderId'      => $tradeNo,
+            'orderNum'        => $tradeNo,
+            'random'          => /*(string) rand(1000,9999)*/'52ZI',
             'amount'          => $this->convertYuanToFen($amount),
-            'noticeUrl'       => $notifyUrl,
-            'isSupportCredit' => self::CREDIT_SUPPORT,
-            'orderCreateTime' => $this->getCurrentTime(),
+            'netway'          => $channel,
+            'goodsName'       => $goodsName,
+            'callBackUrl'     => $notifyUrl,
+            'callBackViewUrl' => $returnUrl,
         ]);
-
-        $payload['payChannel'] = $channel;
-        $payload['ip'] = $clientIp;
-        $payload['lastPayTime'] = $this->getExpireTime();
-        $payload['model'] = self::MODEL;
-
-        return $this->parseResponse($this->httpClient->post('scan/entrance.do', $payload));
+       // return $this->parseResponse($this->httpClient->post('api/pay.action', $payload));
     }
 }
