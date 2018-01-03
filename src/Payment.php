@@ -74,18 +74,22 @@ class Payment
      * Sign request payload.
      *
      * @param array $payload
-     * @return array
+     * @return string
      */
     protected function signPayload(array $payload)
     {
         $payload['merNo'] = $this->merchantNo;
         $payload['version'] = self::API_VERSION;
         $payload['charset'] = self::CHARSET;
+        ksort($payload);
         $payload['sign'] = Signature::generate($payload, $this->md5Key);
-        $payload = json_encode($payload,320);
-        echo 'Payload = ' . $payload;
+        
+        return json_encode($payload, 320);
 
-        return $payload;
+        // var_dump($payload);
+        // echo 'Payload = ' . $payload;
+
+        // return $payload;
     }
 
     /**

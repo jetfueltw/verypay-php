@@ -13,14 +13,14 @@ class Signature
      */
     public static function generate(array $payload, $secretKey)
     {
-        $baseString = self::buildBaseString($payload);
+        //$baseString = self::buildBaseString($payload);
         //echo 'BaseString = '. $baseString . '        ';
 
-        $jsonBaseString = json_encode($baseString,320);
-        echo 'jsonBaseString =' . $jsonBaseString . '       ';
+        $jsonBaseString = json_encode($payload, 320);
+        // echo 'jsonBaseString =' . $jsonBaseString . '       ';
 
         $sign = self::md5Hash($jsonBaseString . $secretKey);
-        echo 'Sign = ' . $sign. '       ';
+        // echo 'Sign = ' . $sign. '       ';
 
         return $sign;
     }
@@ -40,12 +40,12 @@ class Signature
     {
         ksort($payload);
 
-        /*$baseString = '';
+        $baseString = '';
         foreach ($payload as $key => $value) {
             $baseString .= $key.'='.$value.'&';
         }
 
-        return rtrim($baseString, '&');*/
+        return rtrim($baseString, '&');
         return $payload;
     }
 

@@ -31,18 +31,18 @@ class GuzzleHttpClient implements HttpClientInterface
      * POST request.
      *
      * @param string $uri
-     * @param array $data
+     * @param string $data
      * @return string
      */
-    public function post($uri, array $data)
+    public function post($uri, $data)
     {
         $headers = [
             'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
         ];
 
         $response = $this->client->post($this->baseUrl.$uri, [
-            'headers'     => $headers,
-            'form_params' => $data,
+            'headers' => $headers,
+            'body'    => $data,
         ]);
 
         return $response->getBody()->getContents();

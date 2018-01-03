@@ -35,12 +35,15 @@ class DigitalPayment extends Payment
         $payload = $this->signPayload([
             'orderNum'        => $tradeNo,
             'random'          => /*(string) rand(1000,9999)*/'52ZI',
-            'amount'          => $this->convertYuanToFen($amount),
+            'amount'          => (string)$this->convertYuanToFen($amount),
             'netway'          => $channel,
             'goodsName'       => $goodsName,
             'callBackUrl'     => $notifyUrl,
             'callBackViewUrl' => $returnUrl,
         ]);
-       // return $this->parseResponse($this->httpClient->post('api/pay.action', $payload));
+
+var_dump($payload);
+
+        return $this->parseResponse($this->httpClient->post('api/pay.action', $payload));
     }
 }
