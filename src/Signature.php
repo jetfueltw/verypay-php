@@ -13,16 +13,9 @@ class Signature
      */
     public static function generate(array $payload, $secretKey)
     {
-        //$baseString = self::buildBaseString($payload);
-        //echo 'BaseString = '. $baseString . '        ';
+        $baseString = json_encode($payload, 320).$secretKey;
 
-        $jsonBaseString = json_encode($payload, 320);
-        // echo 'jsonBaseString =' . $jsonBaseString . '       ';
-
-        $sign = self::md5Hash($jsonBaseString . $secretKey);
-        // echo 'Sign = ' . $sign. '       ';
-
-        return $sign;
+        return self::md5Hash($baseString);
     }
 
     /**
@@ -36,21 +29,8 @@ class Signature
         return self::generate($payload, $secretKey) === $signature;
     }
 
-    /*private static function buildBaseString(array $payload)
+    private static function md5Hash($baseString)
     {
-        ksort($payload);
-
-        $baseString = '';
-        foreach ($payload as $key => $value) {
-            $baseString .= $key.'='.$value.'&';
-        }
-
-        return rtrim($baseString, '&');
-        return $payload;
-    }*/
-
-    private static function md5Hash($data)
-    {
-        return strtoupper(md5($data));
+        return strtoupper(md5($baseString));
     }
 }

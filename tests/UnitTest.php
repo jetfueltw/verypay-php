@@ -14,8 +14,8 @@ use PHPUnit\Framework\TestCase;
 
 class UnitTest extends TestCase
 {
-    private $merchantNO;
-    private $md5Key;
+    private $merchantId;
+    private $secretKey;
     private $merchantPrivateKey;
     private $merchantPayPublicKey;
     private $merchantRemitPublicKey;
@@ -24,61 +24,87 @@ class UnitTest extends TestCase
     {
         parent::__construct($name, $data, $dataName);
 
-        $this->merchantNO = getenv('MERCHANT_NO');
-        $this->md5Key = getenv('MD5_KEY');
-        $this->merchantPrivateKey = getenv('MERCHANT_PRIVATE_KEY');
-        $this->merchantPayPublicKey = getenv('MERCHANT_PAY_PUBLIC_KEY');
-        $this->merchantRemitPublicKey = getenv('MERCHANT_REMIT_PUBLIC_KEY');
-        
+        $this->merchantId = getenv('MERCHANT_NO');
+        $this->secretKey = getenv('MD5_KEY');
+        //$this->merchantPrivateKey = getenv('MERCHANT_PRIVATE_KEY');
+        //$this->merchantPayPublicKey = getenv('MERCHANT_PAY_PUBLIC_KEY');
+        //$this->merchantRemitPublicKey = getenv('MERCHANT_REMIT_PUBLIC_KEY');
+
+        $this->merchantPrivateKey = '-----BEGIN RSA PRIVATE KEY-----
+MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAI571YkVYHVb4TvTtJxcVVByWRHF
+5se8xDDZZvPA1HlU0tj7bYSdzZ4iluXtj3FKQFQjU4tNgbBaXQMHJQOKRCbOQUhODth1K0FHZtrT
+01eVcXfEcsd0m608vhLjx87Rr6wzJjR+gpq4DT0mAQGxf4wHEPBu5GBZ5aIbwak5ODXBAgMBAAEC
+gYAbvUIiURYZYwzjj+DOvC8j3U835ZZ7dmWfuQORGw6CnJ/7/F8i/XHlgohsNSbDAJiriMEgErPX
++I+5Ii/zk3yW4xEoqkHrHRZGJTGNP2VgwnF25Nr1mDfslI71DJqdZFnl7ZUQcEP3n/IzzvxNYFQ9
+yhYAmxV849QycaNgunZ1AQJBAMXye/QX0aezBdvg0zTzNxTA6SHhfUzvGpVIL+2GVTDlmYsU46d2
+nKOVwOEE20QYLfYiLBZMAqwmi/t8Mt9TYNECQQC4RUDGqVSNMi7e1seTljol/qP6HGLe3tujZY/n
+mHQr2VYQFLnuF7EyBl41nQ7rX/s+OM9wnDgC/21UJBuvFUHxAkAaBIMyVCckaa1tdyGLpiQpQCnk
+YCT+Bbdyw6g5Ch0MbkE+PKKnkjmIbtiJOwAu9RalcVxmGduIERD5Hxv4qpbhAkEAn/GUkRtnRYt6
+fXfmEWfDHzmQsUa0VwkPkhtUtkxxAaKK/jhPTqeH6Yj3ewfRbGKKXG7JN9CRGaEGD5Or5+PGsQJB
+AJnaN/AJdu+G09DnjsgU1uT8cfwqjztAWaV0ctRWkylOonCgo14/iBqEkDfeDNsda8oEknl42ZX/
+UJgJMtPwx/g=
+-----END RSA PRIVATE KEY-----';
+        $this->merchantPayPublicKey = '-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDBteAp6tB90/OG6C6M5RhgKHbGajBZSumfk1st
+d7oihCo+ZOL70GNdyysjduo5jyMy11Sc2cVrl2xmw4oN6IPq2GvP3hSTFpOmo8wnIBcsBecQFcWI
+9bUOsJMXSyBYsHJrLHGzG+UAcFn/ZAVTWaI/7RRrhpfnWPo65dXpdFmsEQIDAQAB
+-----END PUBLIC KEY-----';
+        $this->merchantRemitPublicKey = '-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCS04Bl4sW5o+xSh62l86FLbJxY8Gf7ImT9117R
+Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
+6w9UmvZYafTNbltszdMFY4coDHaL44grLRHMonMEa+gX1rt1WYORiaJLJwIDAQAB
+-----END PUBLIC KEY-----';
     }
 
     /*public function testSign()
     {
-        $tradeNo = '20170812104118797WlN';
+        //$tradeNo = '201712281510357829';
+        $tradeNo = date('YmdHis').rand(10000, 99999);
         $channel = Channel::ALIPAY;
         $amount = 1;
-        $clientIp = '';
-        $goodsName='商品名称';
-        $notifyUrl = 'http://127.0.0.1/';
-        $notifyView = 'http://localhost/view';
-        
-        $payment = new DigitalPayment($this->merchantNO, $this->md5Key, $this->merchantPrivateKey, 
-                            $this->merchantPayPublicKey, $this->merchantRemitPublicKey);
+        $clientIp = '127.0.0.1';
+        $notifyUrl = 'https://www.tencent.com';
+        $returnUrl = 'https://www.tencent.com';
 
-        //var_dump($payment);
-        
-        $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $goodsName, $notifyUrl, $notifyView);
+        $payment = new DigitalPayment($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey);
+
+        $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $notifyUrl, $returnUrl);
         var_dump($result);
-        
     }*/
 
-    /*public function testDigitalPaymentOrder()
+    public function testDigitalPaymentOrder()
     {
         $faker = Factory::create();
-        $tradeNo = str_replace('-', '', $faker->uuid);
-        $channel = Channel::WECHAT;
+        $tradeNo = date('YmdHis').rand(10000, 99999);
+        $channel = Channel::ALIPAY;
         $amount = 1;
         $clientIp = $faker->ipv4;
         $notifyUrl = $faker->url;
-        echo $tradeNo . ' ; ' . $channel . ' ; ' . $amount .' ; ' .  $clientIp . ' ; ' .$notifyUrl . '\n';
+        $returnUrl = $faker->url;
 
-        $payment = new DigitalPayment($this->merchantId, $this->merchantPrivateKey);
-        $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $notifyUrl);
+        // $tradeNo = date('YmdHis').rand(10000, 99999);
+        // $channel = Channel::ALIPAY;
+        // $amount = 1;
+        // $clientIp = '127.0.0.1';
+        // $notifyUrl = 'https://www.tencent.com';
+        // $returnUrl = 'https://www.tencent.com';
 
-        echo ' result_code = ' . $result['result_code'] . '\r\n';
-        echo ' error_code = ' . $result['error_code'];
+        $payment = new DigitalPayment($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey);
+        $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $notifyUrl, $returnUrl);
 
-        $this->assertEquals('0', $result['result_code']);
+        var_dump($result);
+
+        $this->assertEquals('00', $result['stateCode']);
 
         return $tradeNo;
-    }*/
+    }
 
     /**
      * 
      *
      * 
      */
-    public function testDigitalPaymentOrderFind(/*$tradeNo*/)
+    /*public function testDigitalPaymentOrderFind($tradeNo)
     {
         $tradeNo = '20170812104118797WlN';
         $channel = Channel::ALIPAY;
@@ -93,7 +119,7 @@ class UnitTest extends TestCase
 
         var_dump($result);
         //$this->assertEquals('T', $result['is_success']);
-    }
+    }*/
 
     /**
      * @depends testDigitalPaymentOrder
@@ -147,71 +173,71 @@ class UnitTest extends TestCase
         $this->assertFalse($result);
     }*/
 
-/*    public function testNotifyWebhookVerifyNotifyPayload()
-    {
-        $mock = $this->getMockForTrait(NotifyWebhook::class);
+    /*    public function testNotifyWebhookVerifyNotifyPayload()
+        {
+            $mock = $this->getMockForTrait(NotifyWebhook::class);
 
-        $payload = [
-            'trade_no'          => 'C1072507896',
-            'orginal_money'     => '1',
-            'sign_type'         => 'RSA-S',
-            'notify_type'       => 'offline_notify',
-            'merchant_code'     => '1111110166',
-            'order_no'          => '1507174877',
-            'trade_status'      => 'SUCCESS',
-            'sign'              => 'HIMvcuezx2GvwpIlPtNfqF6zsWAz1Pzf1zFjjKHPmFiXW419wWK/DpaeR02K570XTVW+2cWYoouiiVq8dNJnL0zy8EeVsPrf4vkh+2o0KWd8XiDBtdpRwC58dG/DRjVZ3uPovNTPIbIs+A8sJQR5rhLOXkfPQM4DfGVGqPLw10s=',
-            'order_amount'      => '1',
-            'interface_version' => 'V3.3',
-            'bank_seq_no'       => 'W17720171005114118147838',
-            'order_time'        => '2017-10-05 11:41:17',
-            'notify_id'         => '3b51831c178249cdb824a0eab4d1c3d3',
-            'trade_time'        => '2017-10-05 11:41:18',
-        ];
-        $dinpayPublicKey = '-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJQIEXUkjG2RoyCnfucMX1at7O
-PtOCDSiKZhtzHw5HOjXKteBpYBqEBOZc9pNjP/fKbvBNZ3Z7XxUn5ECfQbPCtH9y
-++c0WxAYPoZiPDEYeQmRJfqPR68c0aAtZN5Kh7H1SI2ZRvoMUdZGvvFy3vuPnTwm
-3R+aHq17bch/0ZAudwIDAQAB
------END PUBLIC KEY-----';
+            $payload = [
+                'trade_no'          => 'C1072507896',
+                'orginal_money'     => '1',
+                'sign_type'         => 'RSA-S',
+                'notify_type'       => 'offline_notify',
+                'merchant_code'     => '1111110166',
+                'order_no'          => '1507174877',
+                'trade_status'      => 'SUCCESS',
+                'sign'              => 'HIMvcuezx2GvwpIlPtNfqF6zsWAz1Pzf1zFjjKHPmFiXW419wWK/DpaeR02K570XTVW+2cWYoouiiVq8dNJnL0zy8EeVsPrf4vkh+2o0KWd8XiDBtdpRwC58dG/DRjVZ3uPovNTPIbIs+A8sJQR5rhLOXkfPQM4DfGVGqPLw10s=',
+                'order_amount'      => '1',
+                'interface_version' => 'V3.3',
+                'bank_seq_no'       => 'W17720171005114118147838',
+                'order_time'        => '2017-10-05 11:41:17',
+                'notify_id'         => '3b51831c178249cdb824a0eab4d1c3d3',
+                'trade_time'        => '2017-10-05 11:41:18',
+            ];
+            $dinpayPublicKey = '-----BEGIN PUBLIC KEY-----
+    MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJQIEXUkjG2RoyCnfucMX1at7O
+    PtOCDSiKZhtzHw5HOjXKteBpYBqEBOZc9pNjP/fKbvBNZ3Z7XxUn5ECfQbPCtH9y
+    ++c0WxAYPoZiPDEYeQmRJfqPR68c0aAtZN5Kh7H1SI2ZRvoMUdZGvvFy3vuPnTwm
+    3R+aHq17bch/0ZAudwIDAQAB
+    -----END PUBLIC KEY-----';
 
-        $this->assertTrue($mock->verifyNotifyPayload($payload, $dinpayPublicKey));
-    }
-*/
-/*    public function testNotifyWebhookParseNotifyPayload()
-    {
-        $mock = $this->getMockForTrait(NotifyWebhook::class);
-
-        $payload = [
-            'trade_no'          => 'C1072507896',
-            'orginal_money'     => '1',
-            'sign_type'         => 'RSA-S',
-            'notify_type'       => 'offline_notify',
-            'merchant_code'     => '1111110166',
-            'order_no'          => '1507174877',
-            'trade_status'      => 'SUCCESS',
-            'sign'              => 'HIMvcuezx2GvwpIlPtNfqF6zsWAz1Pzf1zFjjKHPmFiXW419wWK/DpaeR02K570XTVW+2cWYoouiiVq8dNJnL0zy8EeVsPrf4vkh+2o0KWd8XiDBtdpRwC58dG/DRjVZ3uPovNTPIbIs+A8sJQR5rhLOXkfPQM4DfGVGqPLw10s=',
-            'order_amount'      => '1',
-            'interface_version' => 'V3.3',
-            'bank_seq_no'       => 'W17720171005114118147838',
-            'order_time'        => '2017-10-05 11:41:17',
-            'notify_id'         => '3b51831c178249cdb824a0eab4d1c3d3',
-            'trade_time'        => '2017-10-05 11:41:18',
-        ];
-        $dinpayPublicKey = '-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJQIEXUkjG2RoyCnfucMX1at7O
-PtOCDSiKZhtzHw5HOjXKteBpYBqEBOZc9pNjP/fKbvBNZ3Z7XxUn5ECfQbPCtH9y
-++c0WxAYPoZiPDEYeQmRJfqPR68c0aAtZN5Kh7H1SI2ZRvoMUdZGvvFy3vuPnTwm
-3R+aHq17bch/0ZAudwIDAQAB
------END PUBLIC KEY-----';
-
-        $this->assertEquals($payload, $mock->parseNotifyPayload($payload, $dinpayPublicKey));
-    }
-
-    public function testNotifyWebhookSuccessNotifyResponse()
-    {
-        $mock = $this->getMockForTrait(NotifyWebhook::class);
-
-        $this->assertEquals('SUCCESS', $mock->successNotifyResponse());
-    }
+            $this->assertTrue($mock->verifyNotifyPayload($payload, $dinpayPublicKey));
+        }
     */
+    /*    public function testNotifyWebhookParseNotifyPayload()
+        {
+            $mock = $this->getMockForTrait(NotifyWebhook::class);
+
+            $payload = [
+                'trade_no'          => 'C1072507896',
+                'orginal_money'     => '1',
+                'sign_type'         => 'RSA-S',
+                'notify_type'       => 'offline_notify',
+                'merchant_code'     => '1111110166',
+                'order_no'          => '1507174877',
+                'trade_status'      => 'SUCCESS',
+                'sign'              => 'HIMvcuezx2GvwpIlPtNfqF6zsWAz1Pzf1zFjjKHPmFiXW419wWK/DpaeR02K570XTVW+2cWYoouiiVq8dNJnL0zy8EeVsPrf4vkh+2o0KWd8XiDBtdpRwC58dG/DRjVZ3uPovNTPIbIs+A8sJQR5rhLOXkfPQM4DfGVGqPLw10s=',
+                'order_amount'      => '1',
+                'interface_version' => 'V3.3',
+                'bank_seq_no'       => 'W17720171005114118147838',
+                'order_time'        => '2017-10-05 11:41:17',
+                'notify_id'         => '3b51831c178249cdb824a0eab4d1c3d3',
+                'trade_time'        => '2017-10-05 11:41:18',
+            ];
+            $dinpayPublicKey = '-----BEGIN PUBLIC KEY-----
+    MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJQIEXUkjG2RoyCnfucMX1at7O
+    PtOCDSiKZhtzHw5HOjXKteBpYBqEBOZc9pNjP/fKbvBNZ3Z7XxUn5ECfQbPCtH9y
+    ++c0WxAYPoZiPDEYeQmRJfqPR68c0aAtZN5Kh7H1SI2ZRvoMUdZGvvFy3vuPnTwm
+    3R+aHq17bch/0ZAudwIDAQAB
+    -----END PUBLIC KEY-----';
+
+            $this->assertEquals($payload, $mock->parseNotifyPayload($payload, $dinpayPublicKey));
+        }
+
+        public function testNotifyWebhookSuccessNotifyResponse()
+        {
+            $mock = $this->getMockForTrait(NotifyWebhook::class);
+
+            $this->assertEquals('SUCCESS', $mock->successNotifyResponse());
+        }
+        */
 }

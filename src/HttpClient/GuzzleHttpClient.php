@@ -40,7 +40,7 @@ class GuzzleHttpClient implements HttpClientInterface
             'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
         ];
 
-        $response = $this->client->post($this->baseUrl.$uri, [
+        $response = $this->client->request('POST', $this->baseUrl.$uri, [
             'headers' => $headers,
             'body'    => $data,
         ]);

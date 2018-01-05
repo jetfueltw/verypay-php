@@ -7,32 +7,32 @@ class RsaCrypt
     /**
      * Generate rsaEncrypt
      *
+<<<<<<< HEAD
      * @param array $data
+=======
+     * @param array $payload
+>>>>>>> 731f13603c6ffa973d94e4fef0fa28a6c4782287
      * @param string $publicKey
      * @return string
      */
-     public static function rsaEncrypt($data, $publicKey)
-     {
+    public static function rsaEncrypt($payload, $publicKey)
+    {
+        $baseString = json_encode($payload, 320);
+
         $publicKey = openssl_pkey_get_public($publicKey);
-        $encryptData = '';
-        $crypto = '';
-        //var_dump($publicKey);
-        //$data = 'this is a key';
-        //var_dump(openssl_public_encrypt($data, $crypto, $publicKey));
-        foreach(str_split($data, 117) as $chunk) 
-        {
-            //var_dump($chunk);
-            openssl_public_encrypt($chunk, $encryptData, $publicKey);
-            $crypto = $crypto . $encryptData;
-            //var_dump($crypto);
+
+        $encryptChunk = '';
+        $data = '';
+        foreach (str_split($baseString, 117) as $chunk) {
+            openssl_public_encrypt($chunk, $encryptChunk, $publicKey);
+            $data .= $encryptChunk;
         }
 
-        $crypto = base64_encode($crypto);
-		return $crypto;
-     }
+        return urlencode(base64_encode($data));
+    }
 
-     public static function rsaDecrypt($data)
-     {
+    public static function rsaDecrypt($data)
+    {
 
-     }
+    }
 }
