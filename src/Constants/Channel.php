@@ -14,20 +14,8 @@ class Channel
      */
     const ALIPAY = 'ZFB';
 
-     /**
+    /**
      * QQ錢包
      */
     const QQ = 'QQ';
-
-    /**
-     * 財付通
-    */ 
-    //const TENPAY = 'tenpay_scan';*/
-
-    /** 
-     * 京東支付
-     */
-    //const JDPAY = 'jdpay_scan';
-    
-
 }

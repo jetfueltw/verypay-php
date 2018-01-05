@@ -2,16 +2,16 @@
 
 namespace Jetfuel\Verypay;
 
-use Jetfuel\Verypay\HttpClient\GuzzleHttpClient;
+use Jetfuel\Verypay\HttpClient\CurlHttpClient;
 use Jetfuel\Verypay\Traits\ConvertMoney;
 
 class Payment
 {
     use ConvertMoney;
-    const BASE_API_URL = 'http://139.199.195.194:8080/';
-    const API_VERSION = 'V3.1.0.0';
-    const CHARSET = 'UTF-8';
 
+    const BASE_API_URL = 'http://139.199.195.194:8080/';
+    const API_VERSION  = 'V3.1.0.0';
+    const CHARSET      = 'UTF-8';
 
     /**
      * @var string
@@ -21,7 +21,7 @@ class Payment
     /**
      * @var string
      */
-    protected $md5Key;
+    protected $secretKey;
 
     /**
      * @var string
@@ -31,12 +31,7 @@ class Payment
     /**
      * @var string
      */
-    protected $payPublicKey;
-
-    /**
-     * @var string
-     */
-    protected $remitPublicKey;
+    protected $publicKey;
 
     /**
      * @var string
@@ -44,63 +39,48 @@ class Payment
     protected $baseApiUrl;
 
     /**
-     * @var \Jetfuel\Wefupay\HttpClient\HttpClientInterface
+     * @var \Jetfuel\Verypay\HttpClient\HttpClientInterface
      */
     protected $httpClient;
 
     /**
      * Payment constructor.
      *
-     * @param string $merchantNo
-     * @param string $md5Key for sign
+     * @param string $merchantId
+     * @param string $secretKey for sign
      * @param string $privateKey
-     * @param string $payPublicKey
+     * @param string $publicKey
      * @param string $remitRublicKey
      * @param string $baseApiUrl
      */
-    protected function __construct($merchantNo, $md5Key, $privateKey, $payPublicKey, $remitPublicKey, $baseApiUrl = null)
+    protected function __construct($merchantId, $secretKey, $privateKey, $publicKey, $baseApiUrl = null)
     {
-        $this->merchantNo = $merchantNo;
-        $this->md5Key = $md5Key;
+        $this->merchantNo = $merchantId;
+        $this->secretKey = $secretKey;
         $this->privateKey = $privateKey;
-        $this->payPublicKey = $payPublicKey;
-        $this->remitPublicKey = $remitPublicKey;
+        $this->publicKey = $publicKey;
         $this->baseApiUrl = $baseApiUrl === null ? self::BASE_API_URL : $baseApiUrl;
 
-        $this->httpClient = new GuzzleHttpClient($this->baseApiUrl);
+        $this->httpClient = new CurlHttpClient($this->baseApiUrl);
     }
 
     /**
      * Sign request payload.
      *
      * @param array $payload
+     * @param string $publicKey
      * @return string
      */
-    protected function signPayload(array $payload)
+    protected function signPayload(array $payload, $publicKey)
     {
         $payload['merNo'] = $this->merchantNo;
         $payload['version'] = self::API_VERSION;
         $payload['charset'] = self::CHARSET;
         ksort($payload);
-        $payload['sign'] = Signature::generate($payload, $this->md5Key);
-        
-        return json_encode($payload, 320);
 
-    }
+        $payload['sign'] = Signature::generate($payload, $this->secretKey);
+        $data = RsaCrypt::rsaEncrypt($payload, $publicKey);
 
-    protected function rsaEncrypt($data)
-    {
-        $publicKey = $this->payPublicKey;
-        return RsaCrypt::rsaEncrypt($data, $publicKey);
-    }
-
-    /**
-     * Get current time.
-     *
-     * @return string
-     */
-    protected function getCurrentTime()
-    {
-        return (new \DateTime('now', new \DateTimeZone(self::TIME_ZONE)))->format(self::TIME_FORMAT);
+        return 'data='.$data.'&merchNo='.$this->merchantNo.'&version='.self::API_VERSION;
     }
 }

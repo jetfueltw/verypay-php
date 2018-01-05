@@ -8,16 +8,23 @@ class DigitalPayment extends Payment
 {
     use ResultParser;
 
+    const WECHAT_BASE_API_URL = 'http://139.199.195.194:8080/';
+    const ALIPAY_BASE_API_URL = 'http://139.199.195.194:8080/';
+    const QQ_BASE_API_URL     = 'http://139.199.195.194:8080/';
+    const GOODS_NAME          = 'GOODS_NAME';
+
     /**
      * DigitalPayment constructor.
      *
      * @param string $merchantId
      * @param string $secretKey
+     * @param string $privateKey
+     * @param string $publicKey
      * @param null|string $baseApiUrl
      */
-    public function __construct($merchantNo, $md5Key, $privateKey, $payPublicKey, $remitPublicKey, $baseApiUrl = null)
+    public function __construct($merchantId, $secretKey, $privateKey, $publicKey, $baseApiUrl = null)
     {
-        parent::__construct($merchantNo, $md5Key, $privateKey, $payPublicKey, $remitPublicKey, $baseApiUrl);
+        parent::__construct($merchantId, $secretKey, $privateKey, $publicKey, $baseApiUrl);
     }
 
     /**
@@ -28,34 +35,21 @@ class DigitalPayment extends Payment
      * @param float $amount
      * @param string $clientIp
      * @param string $notifyUrl
+     * @param string $returnUrl
      * @return array
      */
-    public function order($tradeNo, $channel, $amount, $clientIp, $goodsName, $notifyUrl, $returnUrl)
+    public function order($tradeNo, $channel, $amount, $clientIp, $notifyUrl, $returnUrl)
     {
         $payload = $this->signPayload([
             'orderNum'        => $tradeNo,
-            'random'          => /*(string) rand(1000,9999)*/'52ZI',
+            'random'          => (string)rand(1000, 9999),
             'amount'          => (string)$this->convertYuanToFen($amount),
             'netway'          => $channel,
-            'goodsName'       => $goodsName,
+            'goodsName'       => self::GOODS_NAME,
             'callBackUrl'     => $notifyUrl,
             'callBackViewUrl' => $returnUrl,
-        ]);
+        ], $this->publicKey);
 
-        var_dump($payload);
-        /*$payload = json_decode($payload,true);
-        var_dump($payload);
-        ksort($payload);
-        $payload = json_encode($payload,320);
-        var_dump($payload);*/
-
-        $payload = $this->rsaEncrypt($payload);
-
-        var_dump($payload);
-
-        $data = 'data=' . urlencode($payload) . '&merchNo=' . 'qyf201705200001' . '&version=V3.1.0.0';
-
-        var_dump($data);
-        return $this->parseResponse($this->httpClient->post('api/pay.action', $data));
+        return $this->parseResponse($this->httpClient->post('api/pay.action', $payload));
     }
 }
