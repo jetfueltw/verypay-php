@@ -5,10 +5,10 @@ namespace Jetfuel\Verypay;
 class RsaCrypt
 {
     /**
-     * Generate signature.
+     * Generate rsaEncrypt
      *
-     * @param array $payload
-     * @param string $secretKey
+     * @param array $data
+     * @param string $publicKey
      * @return string
      */
      public static function rsaEncrypt($data, $publicKey)

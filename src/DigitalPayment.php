@@ -53,7 +53,7 @@ class DigitalPayment extends Payment
 
         var_dump($payload);
 
-        $data = 'data=' . urlencode($payload) . '&merchNo=' . 'qyf201705200001' . '&version=V3.1.0.0';
+        $data = 'data=' . urlencode($payload) . '&merchNo=' . 'QYF201705200001' . '&version=V3.1.0.0';
 
         var_dump($data);
         return $this->parseResponse($this->httpClient->post('api/pay.action', $data));

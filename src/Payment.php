@@ -88,6 +88,16 @@ class Payment
 
     }
 
+    protected function signQueryPayload(array $payload)
+    {
+        $payload['merNo'] = $this->merchantNo;
+        ksort($payload);
+        $payload['sign'] = Signature::generate($payload, $this->md5Key);
+        
+        return json_encode($payload, 320);
+
+    }
+
     protected function rsaEncrypt($data)
     {
         $publicKey = $this->payPublicKey;

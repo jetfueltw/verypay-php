@@ -32,7 +32,7 @@ class UnitTest extends TestCase
         
     }
 
-    public function testSign()
+    /*public function testSign()
     {
         $tradeNo = '20170812104118797WlN';
         $channel = Channel::ALIPAY;
@@ -50,7 +50,7 @@ class UnitTest extends TestCase
         $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $goodsName, $notifyUrl, $notifyView);
         var_dump($result);
         
-    }
+    }*/
 
     /*public function testDigitalPaymentOrder()
     {
@@ -74,17 +74,26 @@ class UnitTest extends TestCase
     }*/
 
     /**
-     * @depends testDigitalPaymentOrder
+     * 
      *
-     * @param $tradeNo
+     * 
      */
-    /*public function testDigitalPaymentOrderFind($tradeNo)
+    public function testDigitalPaymentOrderFind(/*$tradeNo*/)
     {
-        $tradeQuery = new TradeQuery($this->merchantId, $this->merchantPrivateKey);
-        $result = $tradeQuery->find($tradeNo);
+        $tradeNo = '20170812104118797WlN';
+        $channel = Channel::ALIPAY;
+        $amount = 1;
+        $goodsName ='商品名称';
+        $payDate = '2017-08-12';
 
-        $this->assertEquals('T', $result['is_success']);
-    }*/
+        $tradeQuery = new TradeQuery($this->merchantNO, $this->md5Key, $this->merchantPrivateKey, 
+                                    $this->merchantPayPublicKey, $this->merchantRemitPublicKey);
+        $result = $tradeQuery->find($tradeNo, $channel, $amount, $goodsName, $payDate);
+        
+
+        var_dump($result);
+        //$this->assertEquals('T', $result['is_success']);
+    }
 
     /**
      * @depends testDigitalPaymentOrder
