@@ -86,10 +86,12 @@ class Payment
         
         return json_encode($payload, 320);
 
-        // var_dump($payload);
-        // echo 'Payload = ' . $payload;
+    }
 
-        // return $payload;
+    protected function rsaEncrypt($data)
+    {
+        $publicKey = $this->payPublicKey;
+        return RsaCrypt::rsaEncrypt($data, $publicKey);
     }
 
     /**

@@ -42,8 +42,20 @@ class DigitalPayment extends Payment
             'callBackViewUrl' => $returnUrl,
         ]);
 
-var_dump($payload);
+        var_dump($payload);
+        /*$payload = json_decode($payload,true);
+        var_dump($payload);
+        ksort($payload);
+        $payload = json_encode($payload,320);
+        var_dump($payload);*/
 
-        return $this->parseResponse($this->httpClient->post('api/pay.action', $payload));
+        $payload = $this->rsaEncrypt($payload);
+
+        var_dump($payload);
+
+        $data = 'data=' . urlencode($payload) . '&merchNo=' . 'qyf201705200001' . '&version=V3.1.0.0';
+
+        var_dump($data);
+        return $this->parseResponse($this->httpClient->post('api/pay.action', $data));
     }
 }

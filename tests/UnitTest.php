@@ -44,10 +44,11 @@ class UnitTest extends TestCase
         
         $payment = new DigitalPayment($this->merchantNO, $this->md5Key, $this->merchantPrivateKey, 
                             $this->merchantPayPublicKey, $this->merchantRemitPublicKey);
+
+        //var_dump($payment);
         
         $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $goodsName, $notifyUrl, $notifyView);
         var_dump($result);
-        $row = json_decode($result, true);
         
     }
 

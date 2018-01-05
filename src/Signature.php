@@ -36,7 +36,7 @@ class Signature
         return self::generate($payload, $secretKey) === $signature;
     }
 
-    private static function buildBaseString(array $payload)
+    /*private static function buildBaseString(array $payload)
     {
         ksort($payload);
 
@@ -47,7 +47,7 @@ class Signature
 
         return rtrim($baseString, '&');
         return $payload;
-    }
+    }*/
 
     private static function md5Hash($data)
     {
