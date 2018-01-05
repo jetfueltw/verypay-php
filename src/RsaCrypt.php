@@ -7,11 +7,7 @@ class RsaCrypt
     /**
      * Generate rsaEncrypt
      *
-<<<<<<< HEAD
-     * @param array $data
-=======
      * @param array $payload
->>>>>>> 731f13603c6ffa973d94e4fef0fa28a6c4782287
      * @param string $publicKey
      * @return string
      */

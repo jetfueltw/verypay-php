@@ -100,39 +100,42 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
     }
 
     /**
-     * 
+     * @depends testDigitalPaymentOrder
      *
-     * 
+     * @param $tradeNo
      */
-    /*public function testDigitalPaymentOrderFind($tradeNo)
+    public function testDigitalPaymentOrderFind($tradeNo)
     {
-        $tradeNo = '20170812104118797WlN';
         $channel = Channel::ALIPAY;
         $amount = 1;
-        $goodsName ='商品名称';
-        $payDate = '2017-08-12';
+        $payDate = date('Y-m-d');
 
-        $tradeQuery = new TradeQuery($this->merchantNO, $this->md5Key, $this->merchantPrivateKey, 
-                                    $this->merchantPayPublicKey, $this->merchantRemitPublicKey);
-        $result = $tradeQuery->find($tradeNo, $channel, $amount, $goodsName, $payDate);
+        $tradeQuery = new TradeQuery($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey); 
+        $result = $tradeQuery->find($tradeNo, $channel, $amount, $payDate);
         
 
         var_dump($result);
-        //$this->assertEquals('T', $result['is_success']);
-    }*/
+        $this->assertEquals('00', $result['stateCode']);
+    }
 
     /**
      * @depends testDigitalPaymentOrder
      *
      * @param $tradeNo
      */
-    /*public function testDigitalPaymentOrderIsPaid($tradeNo)
+    public function testDigitalPaymentOrderIsPaid($tradeNo)
     {
-        $tradeQuery = new TradeQuery($this->merchantId, $this->merchantPrivateKey);
-        $result = $tradeQuery->isPaid($tradeNo);
+        $channel = Channel::ALIPAY;
+        $amount = 1;
+        $payDate = '2018-01-05';
+
+        $tradeQuery = new TradeQuery($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey);
+        $result = $tradeQuery->isPaid($tradeNo, $channel, $amount, $payDate);
+
+        var_dump($result);
 
         $this->assertFalse($result);
-    }*/
+    }
 
     /*public function testBankPaymentOrder()
     {

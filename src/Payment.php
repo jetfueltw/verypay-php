@@ -83,4 +83,14 @@ class Payment
 
         return 'data='.$data.'&merchNo='.$this->merchantNo.'&version='.self::API_VERSION;
     }
+
+    protected function signQueryPayload(array $payload, $publicKey)
+    {
+        $payload['merNo'] = $this->merchantNo;
+        ksort($payload);
+        $payload['sign'] = Signature::generate($payload, $this->secretKey);
+        $data = RsaCrypt::rsaEncrypt($payload, $publicKey);
+        
+        return 'data='.$data.'&merchNo='.$this->merchantNo.'&version='.self::API_VERSION;
+    }
 }

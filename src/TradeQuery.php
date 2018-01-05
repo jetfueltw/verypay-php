@@ -7,50 +7,43 @@ use Jetfuel\Verypay\Traits\ResultParser;
 class TradeQuery extends Payment
 {
     use ResultParser;
+    const GOODS_NAME          = 'GOODS_NAME';
 
     /**
      * DigitalPayment constructor.
      *
      * @param string $merchantId
-     * @param string $md5Key
+     * @param string $secretKey
      * @param string $privateKey
-     * @param string $payPublicKey
-     * @param string $remitPublicKey
+     * @param string $publicKey
      * @param null|string $baseApiUrl
      */
-    public function __construct($merchantNo, $md5Key, $privateKey, $payPublicKey, $remitPublicKey, $baseApiUrl = null)
+    public function __construct($merchantId, $secretKey, $privateKey, $publicKey, $baseApiUrl = null)
     {
-        parent::__construct($merchantNo, $md5Key, $privateKey, $payPublicKey, $remitPublicKey, $baseApiUrl);
+        parent::__construct($merchantId, $secretKey, $privateKey, $publicKey, $baseApiUrl);
     }
 
     /**
      * Find Order by trade number.
      *
      * @param string $tradeNo
-     * @return array|null
+     * @param string $channel
+     * @param string $amount
+     * @param string $payDate
+     * @return array|
      */
-    public function find($tradeNo, $channel, $amount, $goodsName, $payDate)
+    public function find($tradeNo, $channel, $amount, $payDate)
     {
         $payload = $this->signQueryPayload([
             'orderNum'          => $tradeNo,
             'netway'            => $channel,
             'amount'            => (string)$this->convertYuanToFen($amount),
-            'goodsName'         => $goodsName,
+            'goodsName'         => self::GOODS_NAME,
             'payDate'           => $payDate,
 
-        ]);
-        var_dump($payload);
+        ], $this->publicKey);
 
-        $payload = $this->rsaEncrypt($payload);
-
-        $data = 'data=' . urlencode($payload) . '&merchNo=' . 'QYF201705200001' . '&version=V3.1.0.0';
-        var_dump($data);
-
-        $order = $this->parseResponse($this->httpClient->post('api/queryPayResult.action', $data));
-
-        /*if ($order['is_success'] !== 'T') {
-            return null;
-        }*/
+        $order = $this->parseResponse($this->httpClient->post('api/queryPayResult.action', $payload));
 
         return $order;
     }
@@ -61,14 +54,18 @@ class TradeQuery extends Payment
      * @param string $tradeNo
      * @return bool
      */
-    /*public function isPaid($tradeNo)
+    public function isPaid($tradeNo, $channel, $amount, $payDate)
     {
-        $order = $this->find($tradeNo);
+        $order = $this->find($tradeNo, $channel, $amount, $payDate);
 
-        if ($order === null || !isset($order['data']['replyCode']) || $order['data']['replyCode'] !== '00') {
+        /*if ($order === null || !isset($order['data']['replyCode']) || $order['data']['replyCode'] !== '00') {
             return false;
+        }*/
+        if ($order['payStateCode'] == '00') 
+        {
+            return true;
         }
 
-        return true;
-    }*/
+        return false;
+    }
 }
