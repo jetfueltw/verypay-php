@@ -79,6 +79,7 @@ class Payment
         ksort($payload);
 
         $payload['sign'] = Signature::generate($payload, $this->secretKey);
+        //var_dump($payload);
         $data = RsaCrypt::rsaEncrypt($payload, $publicKey);
 
         return 'data='.$data.'&merchNo='.$this->merchantNo.'&version='.self::API_VERSION;

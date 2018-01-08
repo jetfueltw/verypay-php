@@ -2,7 +2,7 @@
 
 namespace Jetfuel\Verypay\Traits;
 
-use Jetfuel\Zsagepay\Signature;
+use Jetfuel\Verypay\Signature;
 
 trait NotifyWebhook
 {

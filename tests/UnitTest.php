@@ -56,22 +56,6 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
 -----END PUBLIC KEY-----';
     }
 
-    /*public function testSign()
-    {
-        //$tradeNo = '201712281510357829';
-        $tradeNo = date('YmdHis').rand(10000, 99999);
-        $channel = Channel::ALIPAY;
-        $amount = 1;
-        $clientIp = '127.0.0.1';
-        $notifyUrl = 'https://www.tencent.com';
-        $returnUrl = 'https://www.tencent.com';
-
-        $payment = new DigitalPayment($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey);
-
-        $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $notifyUrl, $returnUrl);
-        var_dump($result);
-    }*/
-
     public function testDigitalPaymentOrder()
     {
         $faker = Factory::create();
@@ -127,7 +111,7 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
     {
         $channel = Channel::ALIPAY;
         $amount = 1;
-        $payDate = '2018-01-05';
+        $payDate = date('Y-m-d');
 
         $tradeQuery = new TradeQuery($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey);
         $result = $tradeQuery->isPaid($tradeNo, $channel, $amount, $payDate);
@@ -137,22 +121,23 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
         $this->assertFalse($result);
     }
 
-    /*public function testBankPaymentOrder()
+    public function testBankPaymentOrder()
     {
         $faker = Factory::create();
-        $tradeNo = str_replace('-', '', $faker->uuid);
-        $bank = Bank::CEBB;
+        $tradeNo = date('YmdHis').rand(10000, 99999);
+        $bank = Bank::ICBC;
         $amount = 1;
-        $notifyUrl = $faker->url;
-        $returnUrl = $faker->url;
+        $notifyUrl = 'https://www.tencent.com';//$faker->url;
 
-        $payment = new BankPayment($this->merchantId, $this->merchantPrivateKey);
-        $result = $payment->order($tradeNo, $bank, $amount, $notifyUrl, $returnUrl);
+        $payment = new BankPayment($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantRemitPublicKey);
+        $result = $payment->order($tradeNo, $bank, $amount, $notifyUrl);
 
-        $this->assertContains('<form', $result, '', true);
+        var_dump($result);
 
-        return $tradeNo;
-    }*/
+        /*$this->assertContains('<form', $result, '', true);
+
+        return $tradeNo;*/
+    }
 
     /*public function testTradeQueryFindOrderNotExist()
     {
