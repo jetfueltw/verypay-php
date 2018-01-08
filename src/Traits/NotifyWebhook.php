@@ -3,6 +3,7 @@
 namespace Jetfuel\Verypay\Traits;
 
 use Jetfuel\Verypay\Signature;
+use Jetfuel\Verypay\RsaCrypt;
 
 trait NotifyWebhook
 {
@@ -11,38 +12,40 @@ trait NotifyWebhook
     /**
      * Verify notify request's signature.
      *
-     * @param array $payload
+     * @param $payload
+     * @param $privateKey
      * @param $secretKey
      * @return bool
      */
-    public function verifyNotifyPayload(array $payload, $secretKey)
+    public function verifyNotifyPayload($payload, $privateKey, $secretKey)
     {
-        if (!isset($payload['sign'])) {
+        if (!isset($payload['data']))
+        {
             return false;
         }
-
-        $signature = $payload['sign'];
-
-        unset($payload['ext']);
-        unset($payload['sign']);
-
-        return Signature::validate($payload, $secretKey, $signature);
+        else
+        {
+            $data = urldecode($payload['data']);
+            $data = RsaCrypt::rsaDecrypt($data, $privateKey);
+            $aryData = json_decode($data,true);
+            $signature = $aryData['sign'];
+            unset($aryData['sign']);
+            return Signature::validate($aryData, $secretKey, $signature);
+        }
     }
 
     /**
      * Verify notify request's signature and parse payload.
      *
-     * @param array $payload
-     * @param string $secretKey
+     * @param $payload
+     * @param $secretKey
      * @return array|null
      */
-    public function parseNotifyPayload(array $payload, $secretKey)
+    public function parseNotifyPayload($payload, $secretKey)
     {
         if (!$this->verifyNotifyPayload($payload, $secretKey)) {
             return null;
         }
-
-        $payload['totalAmount'] = $this->convertFenToYuan($payload['totalAmount']);
 
         return $payload;
     }
@@ -54,6 +57,6 @@ trait NotifyWebhook
      */
     public function successNotifyResponse()
     {
-        return '{"code":"00"}';
+        return '0';
     }
 }

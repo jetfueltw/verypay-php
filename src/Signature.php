@@ -24,9 +24,9 @@ class Signature
      * @param string $signature
      * @return bool
      */
-    public static function validate(array $payload, $secretKey, $signature)
+    public static function validate($data, $secretKey, $signature)
     {
-        return self::generate($payload, $secretKey) === $signature;
+        return self::generate($data, $secretKey) === $signature;
     }
 
     private static function md5Hash($baseString)

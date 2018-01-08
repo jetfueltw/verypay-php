@@ -27,8 +27,18 @@ class RsaCrypt
         return urlencode(base64_encode($data));
     }
 
-    public static function rsaDecrypt($data)
+    public static function rsaDecrypt($payload, $privateKey)
     {
+        $privateKey = openssl_get_privatekey($privateKey);
 
+        $data = base64_decode($payload);
+
+        $crypto = '';
+        foreach (str_split($data, 128) as $chunk) {
+            openssl_private_decrypt($chunk, $decryptData, $privateKey);
+            $crypto .= $decryptData;
+        }
+        var_dump($crypto);
+        return $crypto;
     }
 }

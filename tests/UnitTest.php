@@ -121,7 +121,42 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
         $this->assertFalse($result);
     }
 
-    /*public function testBankPaymentOrder()
+
+    public function testNotifyWebhookVerifyNotifyPayload()
+        {
+            $mock = $this->getMockForTrait(NotifyWebhook::class);
+
+            $payload = [
+                'data'          => 'VwbywBPocHXUAKOSly8w%2BvqGRNHg%2FfioIvUTj644ta1wQ6qKjxBSSMPKGHIN3wJYst4bJrQygoAj%0D%0AF88V8hllQUCCh28uHs7GvUp4cezBCNoVDkiNQ9DN2xvuam4lYlp1xXeuyAPDWtPHg3Q7qtxFivNC%0D%0AJDBA9vIc2pq1P997MjqCcoFi4uILZWJZdDJwfIZnYeHo%2F84KMPuVjmNkKQ7eIXXmMvp03OAzW%2BJN%0D%0AyH%2BAtjxBaPueTrFQgQeirdiplaWbYBtez4gdACmC25b6MkaoPdx671%2FnkUPvqOKQWy5b74EZPDCw%0D%0ALCEis4jZ3%2BgU5jSjGnrk%2BVFPJ4DJwFitserT%2Bw%3D%3D',
+                'merchNo'       => 'qyf201705200001',
+                'orderNum'         => '20170812104118797WlN',
+            ];
+
+            $this->assertTrue($mock->verifyNotifyPayload($payload, $this->merchantPrivateKey, $this->secretKey));
+        }
+       /* public function testNotifyWebhookParseNotifyPayload()
+        {
+            $mock = $this->getMockForTrait(NotifyWebhook::class);
+
+            $payload = [
+                'data'          => 'VwbywBPocHXUAKOSly8w%2BvqGRNHg%2FfioIvUTj644ta1wQ6qKjxBSSMPKGHIN3wJYst4bJrQygoAj%0D%0AF88V8hllQUCCh28uHs7GvUp4cezBCNoVDkiNQ9DN2xvuam4lYlp1xXeuyAPDWtPHg3Q7qtxFivNC%0D%0AJDBA9vIc2pq1P997MjqCcoFi4uILZWJZdDJwfIZnYeHo%2F84KMPuVjmNkKQ7eIXXmMvp03OAzW%2BJN%0D%0AyH%2BAtjxBaPueTrFQgQeirdiplaWbYBtez4gdACmC25b6MkaoPdx671%2FnkUPvqOKQWy5b74EZPDCw%0D%0ALCEis4jZ3%2BgU5jSjGnrk%2BVFPJ4DJwFitserT%2Bw%3D%3D',
+                'merchNo'       => 'qyf201705200001',
+                'orderNum'         => '20170812104118797WlN',
+            ];
+
+            $this->assertEquals($payload, $mock->parseNotifyPayload($payload, $this->merchantPrivateKey));
+        }*/
+
+
+        public function testNotifyWebhookSuccessNotifyResponse()
+        {
+            $mock = $this->getMockForTrait(NotifyWebhook::class);
+
+            $this->assertEquals('0', $mock->successNotifyResponse());
+        }
+        
+
+            /*public function testBankPaymentOrder()
     {
         $faker = Factory::create();
         $tradeNo = date('YmdHis').rand(10000, 99999);
@@ -137,7 +172,7 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
         /*$this->assertContains('<form', $result, '', true);
 
         return $tradeNo;*/
-}*/
+/*}*/
 
     /*public function testTradeQueryFindOrderNotExist()
     {
@@ -161,71 +196,4 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
         $this->assertFalse($result);
     }*/
 
-    /*    public function testNotifyWebhookVerifyNotifyPayload()
-        {
-            $mock = $this->getMockForTrait(NotifyWebhook::class);
-
-            $payload = [
-                'trade_no'          => 'C1072507896',
-                'orginal_money'     => '1',
-                'sign_type'         => 'RSA-S',
-                'notify_type'       => 'offline_notify',
-                'merchant_code'     => '1111110166',
-                'order_no'          => '1507174877',
-                'trade_status'      => 'SUCCESS',
-                'sign'              => 'HIMvcuezx2GvwpIlPtNfqF6zsWAz1Pzf1zFjjKHPmFiXW419wWK/DpaeR02K570XTVW+2cWYoouiiVq8dNJnL0zy8EeVsPrf4vkh+2o0KWd8XiDBtdpRwC58dG/DRjVZ3uPovNTPIbIs+A8sJQR5rhLOXkfPQM4DfGVGqPLw10s=',
-                'order_amount'      => '1',
-                'interface_version' => 'V3.3',
-                'bank_seq_no'       => 'W17720171005114118147838',
-                'order_time'        => '2017-10-05 11:41:17',
-                'notify_id'         => '3b51831c178249cdb824a0eab4d1c3d3',
-                'trade_time'        => '2017-10-05 11:41:18',
-            ];
-            $dinpayPublicKey = '-----BEGIN PUBLIC KEY-----
-    MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJQIEXUkjG2RoyCnfucMX1at7O
-    PtOCDSiKZhtzHw5HOjXKteBpYBqEBOZc9pNjP/fKbvBNZ3Z7XxUn5ECfQbPCtH9y
-    ++c0WxAYPoZiPDEYeQmRJfqPR68c0aAtZN5Kh7H1SI2ZRvoMUdZGvvFy3vuPnTwm
-    3R+aHq17bch/0ZAudwIDAQAB
-    -----END PUBLIC KEY-----';
-
-            $this->assertTrue($mock->verifyNotifyPayload($payload, $dinpayPublicKey));
-        }
-    */
-    /*    public function testNotifyWebhookParseNotifyPayload()
-        {
-            $mock = $this->getMockForTrait(NotifyWebhook::class);
-
-            $payload = [
-                'trade_no'          => 'C1072507896',
-                'orginal_money'     => '1',
-                'sign_type'         => 'RSA-S',
-                'notify_type'       => 'offline_notify',
-                'merchant_code'     => '1111110166',
-                'order_no'          => '1507174877',
-                'trade_status'      => 'SUCCESS',
-                'sign'              => 'HIMvcuezx2GvwpIlPtNfqF6zsWAz1Pzf1zFjjKHPmFiXW419wWK/DpaeR02K570XTVW+2cWYoouiiVq8dNJnL0zy8EeVsPrf4vkh+2o0KWd8XiDBtdpRwC58dG/DRjVZ3uPovNTPIbIs+A8sJQR5rhLOXkfPQM4DfGVGqPLw10s=',
-                'order_amount'      => '1',
-                'interface_version' => 'V3.3',
-                'bank_seq_no'       => 'W17720171005114118147838',
-                'order_time'        => '2017-10-05 11:41:17',
-                'notify_id'         => '3b51831c178249cdb824a0eab4d1c3d3',
-                'trade_time'        => '2017-10-05 11:41:18',
-            ];
-            $dinpayPublicKey = '-----BEGIN PUBLIC KEY-----
-    MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJQIEXUkjG2RoyCnfucMX1at7O
-    PtOCDSiKZhtzHw5HOjXKteBpYBqEBOZc9pNjP/fKbvBNZ3Z7XxUn5ECfQbPCtH9y
-    ++c0WxAYPoZiPDEYeQmRJfqPR68c0aAtZN5Kh7H1SI2ZRvoMUdZGvvFy3vuPnTwm
-    3R+aHq17bch/0ZAudwIDAQAB
-    -----END PUBLIC KEY-----';
-
-            $this->assertEquals($payload, $mock->parseNotifyPayload($payload, $dinpayPublicKey));
-        }
-
-        public function testNotifyWebhookSuccessNotifyResponse()
-        {
-            $mock = $this->getMockForTrait(NotifyWebhook::class);
-
-            $this->assertEquals('SUCCESS', $mock->successNotifyResponse());
-        }
-        */
 }
