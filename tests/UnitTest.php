@@ -121,7 +121,7 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
         $this->assertFalse($result);
     }
 
-    public function testBankPaymentOrder()
+    /*public function testBankPaymentOrder()
     {
         $faker = Factory::create();
         $tradeNo = date('YmdHis').rand(10000, 99999);
@@ -137,7 +137,7 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
         /*$this->assertContains('<form', $result, '', true);
 
         return $tradeNo;*/
-    }
+}*/
 
     /*public function testTradeQueryFindOrderNotExist()
     {
