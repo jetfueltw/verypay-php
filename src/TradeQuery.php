@@ -43,7 +43,7 @@ class TradeQuery extends Payment
 
         ], $this->publicKey);
 
-        $order = $this->parseResponse($this->httpClient->post('api/queryPayResult.action', $payload));
+        $order = $this->parseResponse($this->httpClient->post('api/queryPayResult.action', $payload), $this->secretKey);
 
         return $order;
     }

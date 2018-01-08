@@ -25,8 +25,7 @@ trait NotifyWebhook
         }
         else
         {
-            $data = urldecode($payload['data']);
-            $data = RsaCrypt::rsaDecrypt($data, $privateKey);
+            $data = RsaCrypt::rsaDecrypt(urldecode($payload['data']), $privateKey);
             $aryData = json_decode($data,true);
             $signature = $aryData['sign'];
             unset($aryData['sign']);
@@ -38,16 +37,27 @@ trait NotifyWebhook
      * Verify notify request's signature and parse payload.
      *
      * @param $payload
+     * @param $privateKey
      * @param $secretKey
      * @return array|null
      */
-    public function parseNotifyPayload($payload, $secretKey)
+    public function parseNotifyPayload($payload, $privateKey, $secretKey)
     {
-        if (!$this->verifyNotifyPayload($payload, $secretKey)) {
+        if (!isset($payload['data']))
+        {
             return null;
         }
+        else
+        {
+            $data = RsaCrypt::rsaDecrypt(urldecode($payload['data']), $privateKey);
 
-        return $payload;
+            return json_decode($data,true);
+        }
+        /*
+        if (!$this->verifyNotifyPayload($payload, $privateKey, $secretKey)) {
+            return null;
+        }
+        return $payload;*/
     }
 
     /**

@@ -26,6 +26,7 @@ class Signature
      */
     public static function validate($data, $secretKey, $signature)
     {
+        ksort($data);
         return self::generate($data, $secretKey) === $signature;
     }
 

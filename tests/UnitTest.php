@@ -134,7 +134,7 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
 
             $this->assertTrue($mock->verifyNotifyPayload($payload, $this->merchantPrivateKey, $this->secretKey));
         }
-       /* public function testNotifyWebhookParseNotifyPayload()
+        public function testNotifyWebhookParseNotifyPayload()
         {
             $mock = $this->getMockForTrait(NotifyWebhook::class);
 
@@ -144,8 +144,9 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
                 'orderNum'         => '20170812104118797WlN',
             ];
 
-            $this->assertEquals($payload, $mock->parseNotifyPayload($payload, $this->merchantPrivateKey));
-        }*/
+            // $this->assertEquals($payload, $mock->parseNotifyPayload($payload, $this->merchantPrivateKey, $this->secretKey));
+            $this->assertEquals('00',$mock->parseNotifyPayload($payload, $this->merchantPrivateKey, $this->secretKey)['payResult']);
+        }
 
 
         public function testNotifyWebhookSuccessNotifyResponse()

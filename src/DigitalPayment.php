@@ -50,6 +50,6 @@ class DigitalPayment extends Payment
             'callBackViewUrl' => $returnUrl,
         ], $this->publicKey);
 
-        return $this->parseResponse($this->httpClient->post('api/pay.action', $payload));
+        return $this->parseResponse($this->httpClient->post('api/pay.action', $payload),$this->secretKey);
     }
 }
