@@ -50,8 +50,16 @@ trait NotifyWebhook
         else
         {
             $data = RsaCrypt::rsaDecrypt(urldecode($payload['data']), $privateKey);
-
-            return json_decode($data,true);
+            $aryData = json_decode($data,true);
+            $signature = $aryData['sign'];
+            unset($aryData['sign']);
+            if (Signature::validate($aryData, $secretKey, $signature))
+            {
+                $aryData['amount'] = $this->convertFenToYuan($aryData['amount']);
+                var_dump($aryData);
+                return $aryData;
+            }
+            return null;
         }
         /*
         if (!$this->verifyNotifyPayload($payload, $privateKey, $secretKey)) {

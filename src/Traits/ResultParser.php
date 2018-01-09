@@ -25,6 +25,6 @@ trait ResultParser
                 return json_decode($response, true);
             }
         }
-        return null;
+        return json_decode($response, true);;
     }
 }

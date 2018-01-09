@@ -38,7 +38,6 @@ class RsaCrypt
             openssl_private_decrypt($chunk, $decryptData, $privateKey);
             $crypto .= $decryptData;
         }
-        var_dump($crypto);
         return $crypto;
     }
 }
