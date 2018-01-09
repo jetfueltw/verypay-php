@@ -7,8 +7,8 @@ use Jetfuel\Verypay\Traits\ResultParser;
 class DigitalPayment extends Payment
 {
     use ResultParser;
-    
-    const GOODS_NAME          = 'GOODS_NAME';
+
+    const GOODS_NAME = 'GOODS_NAME';
 
     /**
      * DigitalPayment constructor.

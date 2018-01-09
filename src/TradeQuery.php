@@ -58,9 +58,6 @@ class TradeQuery extends Payment
     {
         $order = $this->find($tradeNo, $channel, $amount, $payDate);
 
-        /*if ($order === null || !isset($order['data']['replyCode']) || $order['data']['replyCode'] !== '00') {
-            return false;
-        }*/
         if ($order['payStateCode'] == '00') 
         {
             return true;

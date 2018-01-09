@@ -14,10 +14,8 @@ class Channel
      */
     const ALIPAY = 'ZFB';
 
-
     /**
      * QQ錢包
      */
     const QQ = 'QQ';
-
 }

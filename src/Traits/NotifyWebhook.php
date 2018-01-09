@@ -47,25 +47,20 @@ trait NotifyWebhook
         {
             return null;
         }
-        else
+  
+        $data = RsaCrypt::rsaDecrypt(urldecode($payload['data']), $privateKey);
+        $aryData = json_decode($data,true);
+        $signature = $aryData['sign'];
+        unset($aryData['sign']);
+
+        if (!Signature::validate($aryData, $secretKey, $signature))
         {
-            $data = RsaCrypt::rsaDecrypt(urldecode($payload['data']), $privateKey);
-            $aryData = json_decode($data,true);
-            $signature = $aryData['sign'];
-            unset($aryData['sign']);
-            if (Signature::validate($aryData, $secretKey, $signature))
-            {
-                $aryData['amount'] = $this->convertFenToYuan($aryData['amount']);
-                var_dump($aryData);
-                return $aryData;
-            }
             return null;
         }
-        /*
-        if (!$this->verifyNotifyPayload($payload, $privateKey, $secretKey)) {
-            return null;
-        }
-        return $payload;*/
+
+        $aryData['amount'] = $this->convertFenToYuan($aryData['amount']);
+
+        return $aryData;
     }
 
     /**

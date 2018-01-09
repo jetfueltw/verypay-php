@@ -61,9 +61,7 @@ class Payment
         $this->secretKey = $secretKey;
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
-        $this->baseApiUrl = $baseApiUrl;// === null ? self::BASE_API_URL : $baseApiUrl;
-
-        //$this->httpClient = new CurlHttpClient($this->baseApiUrl);
+        $this->baseApiUrl = $baseApiUrl;
     }
 
     /**
