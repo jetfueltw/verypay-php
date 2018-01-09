@@ -66,14 +66,7 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
         $notifyUrl = $faker->url;
         $returnUrl = $faker->url;
 
-        // $tradeNo = date('YmdHis').rand(10000, 99999);
-        // $channel = Channel::ALIPAY;
-        // $amount = 1;
-        // $clientIp = '127.0.0.1';
-        // $notifyUrl = 'https://www.tencent.com';
-        // $returnUrl = 'https://www.tencent.com';
-
-        $payment = new DigitalPayment($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey);
+    $payment = new DigitalPayment($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey, 'http://139.199.195.194:8080/');
         $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $notifyUrl, $returnUrl);
 
         var_dump($result);
@@ -82,7 +75,20 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
 
         return $tradeNo;
     }
+    /*public function testDigitalPaymentOrderFind1()
+    {
+        $tradeNo = date('YmdHis').rand(10000, 99999);
+        $channel = Channel::ALIPAY;
+        $amount = 1;
+        $payDate = date('Y-m-d');
 
+        $tradeQuery = new TradeQuery($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey); 
+        $result = $tradeQuery->find($tradeNo, $channel, $amount, $payDate);
+        
+
+        var_dump($result);
+        $this->assertEquals('00', $result['stateCode']);
+    }*/
     /**
      * @depends testDigitalPaymentOrder
      *
@@ -94,7 +100,7 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
         $amount = 1;
         $payDate = date('Y-m-d');
 
-        $tradeQuery = new TradeQuery($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey); 
+        $tradeQuery = new TradeQuery($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey, 'http://139.199.195.194:8080/'); 
         $result = $tradeQuery->find($tradeNo, $channel, $amount, $payDate);
         
 
@@ -113,7 +119,7 @@ Y3TeUlICjiBTkUUJn/q/jQhSppja1jCU02zoS4g5Jq7ZeFaxdDeNkWqvfF76YC7U7lE+S6b9Wv/k
         $amount = 1;
         $payDate = date('Y-m-d');
 
-        $tradeQuery = new TradeQuery($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey);
+        $tradeQuery = new TradeQuery($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->merchantPayPublicKey, 'http://139.199.195.194:8080/');
         $result = $tradeQuery->isPaid($tradeNo, $channel, $amount, $payDate);
 
         var_dump($result);

@@ -7,10 +7,7 @@ use Jetfuel\Verypay\Traits\ResultParser;
 class DigitalPayment extends Payment
 {
     use ResultParser;
-
-    const WECHAT_BASE_API_URL = 'http://139.199.195.194:8080/';
-    const ALIPAY_BASE_API_URL = 'http://139.199.195.194:8080/';
-    const QQ_BASE_API_URL     = 'http://139.199.195.194:8080/';
+    
     const GOODS_NAME          = 'GOODS_NAME';
 
     /**

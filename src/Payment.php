@@ -5,11 +5,13 @@ namespace Jetfuel\Verypay;
 use Jetfuel\Verypay\HttpClient\CurlHttpClient;
 use Jetfuel\Verypay\Traits\ConvertMoney;
 
+use Jetfuel\Verypay\Constants\BaseUrl;
+
 class Payment
 {
     use ConvertMoney;
 
-    const BASE_API_URL = 'http://139.199.195.194:8080/';
+    //const BASE_API_URL = 'http://139.199.195.194:8080/';
     const API_VERSION  = 'V3.1.0.0';
     const CHARSET      = 'UTF-8';
 
@@ -59,9 +61,9 @@ class Payment
         $this->secretKey = $secretKey;
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
-        $this->baseApiUrl = $baseApiUrl === null ? self::BASE_API_URL : $baseApiUrl;
+        $this->baseApiUrl = $baseApiUrl;// === null ? self::BASE_API_URL : $baseApiUrl;
 
-        $this->httpClient = new CurlHttpClient($this->baseApiUrl);
+        //$this->httpClient = new CurlHttpClient($this->baseApiUrl);
     }
 
     /**
@@ -76,10 +78,18 @@ class Payment
         $payload['merNo'] = $this->merchantNo;
         $payload['version'] = self::API_VERSION;
         $payload['charset'] = self::CHARSET;
+        if (isset($this->baseApiUrl))
+        {
+            $this->httpClient = new CurlHttpClient($this->baseApiUrl);
+        }
+        else
+        {
+            $this->httpClient = new CurlHttpClient(BaseUrl::URL[$payload['netway']]);
+        }
         ksort($payload);
 
         $payload['sign'] = Signature::generate($payload, $this->secretKey);
-        //var_dump($payload);
+
         $data = RsaCrypt::rsaEncrypt($payload, $publicKey);
 
         return 'data='.$data.'&merchNo='.$this->merchantNo.'&version='.self::API_VERSION;
@@ -88,6 +98,14 @@ class Payment
     protected function signQueryPayload(array $payload, $publicKey)
     {
         $payload['merNo'] = $this->merchantNo;
+        if (isset($this->baseApiUrl))
+        {
+            $this->httpClient = new CurlHttpClient($this->baseApiUrl);
+        }
+        else
+        {
+            $this->httpClient = new CurlHttpClient(BaseUrl::QUERY);
+        }
         ksort($payload);
         $payload['sign'] = Signature::generate($payload, $this->secretKey);
         $data = RsaCrypt::rsaEncrypt($payload, $publicKey);
