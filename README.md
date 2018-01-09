@@ -37,10 +37,10 @@ Result:
 [
     'merNo' => 'XXXXXXXXXXXXXXX', // 商家號
     'stateCode' => 'XX', // 00表示成功
-    'msg'=> 'XXXX'; // 狀態描述
-    'orderNum'=>'20180109023351XXXXX', // 商家產生的唯一訂單號
-    'qrcodeUrl'=>'https://qr.alipay.com/upx07533duhp4xmuuXXXXXXX', // 支付網址
-    'sign'=> '1C1E6B6DCD8DC9F70565AFXXXXXXXXXX', // 簽名(字母大寫)
+    'msg' => 'XXXX'; // 狀態描述
+    'orderNum' =>'20180109023351XXXXX', // 商家產生的唯一訂單號
+    'qrcodeUrl' =>'https://qr.alipay.com/upx07533duhp4xmuuXXXXXXX', // 支付網址
+    'sign' => '1C1E6B6DCD8DC9F70565AFXXXXXXXXXX', // 簽名(字母大寫)
 ];
 ```
 
@@ -57,11 +57,42 @@ Result:
 Post Data:
 [
     'merNo' => 'XXXXXXXXXXXXXXX', // 商家號
-    'netway' => 'XXXXX', // 支付寶'ZFB',微信'WX',微信WAP'WX_WAP',支付寶WAP'ZFB_WAP'，QQ錢包'QQ'，QQWAP'QQ_WAP')
+    'netway' => 'XXXXX', // 支付寶'ZFB',微信'WX',QQ錢包'QQ')
     'orderNum' => '20180109023351XXXXX', // 商家產生的唯一訂單號
     'amount'   => 100, //消費金額 (分)
-    'transTime' => '20150211155604', // 交易時間
-    'totalAmount' => 100, // 消費金額 (分)
-    'sign' => '69C0A709C58C7E7BFA5CF5B7F8D690C0', // 簽名
+    'goodsName' => 'XXXXXX', //商品名稱
+    'payResult' => 'XX', // 支付狀態,00表示成功
+    'payDate' => , // 支付時間，格式：yyyyMMddHHmmss
+    'sign' => '1C1E6B6DCD8DC9F70565AFXXXXXXXXXX', // 簽名(字母大寫)
 ]
 ```
+
+### 掃碼支付訂單查詢
+
+使用商家訂單號查詢單筆訂單狀態。
+
+```
+$merchantId = 'XXXXXXXXXXXXXXX'; // 商家號
+$secretKey = 'XXXXXXXXXXXXXXX'; // md5 密鑰
+$merchantPrivateKey = '-----BEGIN RSA PRIVATE KEY-----XXXXXXXXXX-----BEGIN RSA PRIVATE KEY-----' //RSA密鑰
+$merchantPayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
+
+$tradeNo = '20180109023351XXXXX'; // 商家產生的唯一訂單號
+$channel = Channel::WECHAT; // 支付通道，支援微信支付、QQ錢包、支付寶
+$amount = 1.00; // 消費金額 (元)
+$payDate = //支付時間，格式：yyyyMMddHHmmss
+```
+```
+$tradeQuery = new TradeQuery($merchantId, $secretKey, merchantPrivateKey, merchantPayPublicKey);
+$result = $tradeQuery->find($tradeNo, $channel, $amount, $payDate);
+```
+```
+Result:
+[
+    'merNo' => 'XXXXXXXXXXXXXXX', // 商家號
+    'msg' => 'XXXX'; // 狀態描述
+    'stateCode' => 'XX', // 00表示成功
+    'orderNum' =>'20180109023351XXXXX', // 商家產生的唯一訂單號
+    'payStateCode' => 'XX', // 支付狀態 00:支付成功 01:支付失敗 03:簽名錯誤 04:其他錯誤 05:未知 06:初始 50:網絡異常 99:未支付
+    'sign' => '1C1E6B6DCD8DC9F70565AFXXXXXXXXXX', // 簽名(字母大寫)
+]

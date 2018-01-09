@@ -85,9 +85,7 @@ class Payment
             $this->httpClient = new CurlHttpClient(BaseUrl::URL[$payload['netway']]);
         }
         ksort($payload);
-
         $payload['sign'] = Signature::generate($payload, $this->secretKey);
-
         $data = RsaCrypt::rsaEncrypt($payload, $publicKey);
 
         return 'data='.$data.'&merchNo='.$this->merchantNo.'&version='.self::API_VERSION;
