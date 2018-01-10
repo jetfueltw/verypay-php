@@ -27,7 +27,7 @@ trait ResultParser
             else 
             {
                 $signError = '{"stateCode" : "03", "msg" : "签名错误"}';
-                return json_decode($signError);
+                return json_decode($signError, true);
             }
         }
         return json_decode($response, true);;
