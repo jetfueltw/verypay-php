@@ -7,7 +7,8 @@ use Jetfuel\Verypay\Traits\ResultParser;
 class TradeQuery extends Payment
 {
     use ResultParser;
-    const GOODS_NAME          = 'GOODS_NAME';
+
+    const GOODS_NAME = 'GOODS_NAME';
 
     /**
      * DigitalPayment constructor.
@@ -30,20 +31,24 @@ class TradeQuery extends Payment
      * @param string $channel
      * @param string $amount
      * @param string $payDate
-     * @return array|
+     * @return array|null
      */
     public function find($tradeNo, $channel, $amount, $payDate)
     {
         $payload = $this->signQueryPayload([
-            'orderNum'          => $tradeNo,
-            'netway'            => $channel,
-            'amount'            => (string)$this->convertYuanToFen($amount),
-            'goodsName'         => self::GOODS_NAME,
-            'payDate'           => $payDate,
+            'orderNum'  => $tradeNo,
+            'netway'    => $channel,
+            'amount'    => (string)$this->convertYuanToFen($amount),
+            'goodsName' => self::GOODS_NAME,
+            'payDate'   => $payDate,
 
         ], $this->publicKey);
 
         $order = $this->parseResponse($this->httpClient->post('api/queryPayResult.action', $payload), $this->secretKey);
+
+        if ($order['stateCode'] !== '00') {
+            return null;
+        }
 
         return $order;
     }
@@ -58,11 +63,10 @@ class TradeQuery extends Payment
     {
         $order = $this->find($tradeNo, $channel, $amount, $payDate);
 
-        if ($order['payStateCode'] == '00') 
-        {
-            return true;
+        if ($order === null || !isset($order['payStateCode']) || $order['payStateCode'] !== '00') {
+            return false;
         }
 
-        return false;
+        return true;
     }
 }
