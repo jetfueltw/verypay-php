@@ -13,6 +13,7 @@ class Signature
      */
     public static function generate(array $payload, $secretKey)
     {
+        ksort($payload);
         $baseString = json_encode($payload, 320).$secretKey;
 
         return self::md5Hash($baseString);
@@ -24,10 +25,9 @@ class Signature
      * @param string $signature
      * @return bool
      */
-    public static function validate($data, $secretKey, $signature)
+    public static function validate(array $payload, $secretKey, $signature)
     {
-        ksort($data);
-        return self::generate($data, $secretKey) === $signature;
+        return self::generate($payload, $secretKey) === $signature;
     }
 
     private static function md5Hash($baseString)

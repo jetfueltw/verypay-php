@@ -30,7 +30,7 @@ class UnitTest extends TestCase
     public function testDigitalPaymentOrder()
     {
         $faker = Factory::create();
-        $tradeNo = date('YmdHis').rand(10000, 99999);
+        $tradeNo = date('YmdHis').rand(1000, 9999);
         $channel = Channel::ALIPAY;
         $amount = 1;
         $clientIp = $faker->ipv4;
@@ -39,8 +39,6 @@ class UnitTest extends TestCase
 
         $payment = new DigitalPayment($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->gatewayPublicKey, 'http://139.199.195.194:8080/');
         $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $notifyUrl, $returnUrl);
-
-        var_dump($result);
 
         $this->assertEquals('00', $result['stateCode']);
 

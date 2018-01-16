@@ -18,4 +18,19 @@ class Channel
      * QQ錢包
      */
     const QQ = 'QQ';
+
+    /**
+     * 京東支付
+     */
+    const JDPAY = 'JD';
+
+    /**
+     * 銀聯
+     */
+    const UNIONPAY = 'UNIONPAY';
+
+    /**
+     * 百度錢包
+     */
+    const BAIDU = 'BAIDU';
 }
