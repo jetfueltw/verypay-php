@@ -96,3 +96,25 @@ Result:
     'payStateCode' => 'XX', // 支付狀態 00:支付成功 01:支付失敗 03:簽名錯誤 04:其他錯誤 05:未知 06:初始 50:網絡異常 99:未支付
     'sign' => '1C1E6B6DCD8DC9F70565AFXXXXXXXXXX', // 簽名(字母大寫)
 ]
+```
+
+### 掃碼支付訂單支付成功查詢
+
+使用商家訂單號查詢單筆訂單是否支付成功。
+
+```
+$merchantId = 'XXXXXXXXXXXXXXX'; // 商家號
+$secretKey = 'XXXXXXXXXXXXXXX'; // md5 密鑰
+$merchantPrivateKey = '-----BEGIN RSA PRIVATE KEY-----XXXXXXXXXX-----BEGIN RSA PRIVATE KEY-----' //RSA密鑰
+$merchantPayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
+
+$tradeNo = '20180109023351XXXXX'; // 商家產生的唯一訂單號
+```
+```
+$tradeQuery = new TradeQuery($merchantId, $secretKey, merchantPrivateKey, merchantPayPublicKey);
+$result = $tradeQuery->isPaid($tradeNo, $channel, $amount, $payDate);
+```
+```
+Result:
+bool(true|false)
+```   
