@@ -73,7 +73,7 @@ class Payment
         $payload['goodsName'] = self::GOODS_NAME;
         $payload['sign'] = Signature::generate($payload, $this->secretKey);
 
-        $data = RsaCrypt::rsaEncrypt($payload, $publicKey);
+        $data = RsaCrypt::encrypt($payload, $publicKey);
 
         return 'data='.$data.'&merchNo='.$this->merchantNo.'&version='.self::API_VERSION;
     }

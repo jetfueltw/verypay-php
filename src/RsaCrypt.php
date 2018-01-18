@@ -5,39 +5,40 @@ namespace Jetfuel\Verypay;
 class RsaCrypt
 {
     /**
-     * Generate rsaEncrypt
-     *
      * @param array $payload
      * @param string $publicKey
      * @return string
      */
-    public static function rsaEncrypt($payload, $publicKey)
+    public static function encrypt($payload, $publicKey)
     {
         $baseString = json_encode($payload, 320);
-
         $publicKey = openssl_pkey_get_public($publicKey);
 
-        $encryptChunk = '';
-        $data = '';
+        $encryptData = '';
         foreach (str_split($baseString, 117) as $chunk) {
-            openssl_public_encrypt($chunk, $encryptChunk, $publicKey);
-            $data .= $encryptChunk;
+            openssl_public_encrypt($chunk, $crypted, $publicKey);
+            $encryptData .= $crypted;
         }
 
-        return urlencode(base64_encode($data));
+        return urlencode(base64_encode($encryptData));
     }
 
-    public static function rsaDecrypt($payload, $privateKey)
+    /**
+     * @param string $data
+     * @param string $privateKey
+     * @return array
+     */
+    public static function decrypt($data, $privateKey)
     {
+        $data = base64_decode(urldecode($data));
         $privateKey = openssl_get_privatekey($privateKey);
 
-        $data = base64_decode($payload);
-
-        $crypto = '';
+        $decryptData = '';
         foreach (str_split($data, 128) as $chunk) {
-            openssl_private_decrypt($chunk, $decryptData, $privateKey);
-            $crypto .= $decryptData;
+            openssl_private_decrypt($chunk, $decrypted, $privateKey);
+            $decryptData .= $decrypted;
         }
-        return $crypto;
+
+        return json_decode($decryptData, true);
     }
 }
