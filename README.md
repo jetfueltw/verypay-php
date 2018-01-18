@@ -20,16 +20,16 @@ composer require jetfueltw/verypay-php
 $merchantId = 'XXXXXXXXXXXXXXX'; // 商家號
 $secretKey = 'XXXXXXXXXXXXXXX'; // md5 密鑰
 $merchantPrivateKey = '-----BEGIN RSA PRIVATE KEY-----XXXXXXXXXX-----BEGIN RSA PRIVATE KEY-----' //RSA密鑰
-$merchantPayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
+$gatewayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
 $tradeNo = '20180109023351XXXXX'; // 商家產生的唯一訂單號
-$channel = Channel::WECHAT; // 支付通道，支援微信支付、QQ錢包、支付寶
+$channel = Channel::ALIPAY; // 支付通道，支援微信支付、QQ錢包、支付寶、京東支付、銀聯、百度錢包
 $amount = 1.00; // 消費金額 (元)
 $clientIp = 'XXX.XXX.XXX.XXX'; // 消費者端 IP 位址
 $notifyUrl = 'https://XXX.XXX.XXX'; // 交易完成後異步通知接口
 $returnUrl = 'https://XXX.XXX.XXX'; // 交易完成後會跳轉到這個頁面
 ```
 ```
-$payment = new DigitalPayment(merchantId, secretKey, merchantPrivateKey, merchantPayPublicKey);
+$payment = new DigitalPayment($merchantId, $secretKey, $merchantPrivateKey, $gatewayPublicKey);
 $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $notifyUrl, $returnUrl);
 ```
 ```
@@ -57,13 +57,13 @@ Result:
 Post Data:
 [
     'merNo' => 'XXXXXXXXXXXXXXX', // 商家號
-    'netway' => 'XXXXX', // 支付寶'ZFB',微信'WX',QQ錢包'QQ')
+    'netway' => 'XXXXX', // 支付通道
     'orderNum' => '20180109023351XXXXX', // 商家產生的唯一訂單號
     'amount'   => 100, //消費金額 (分)
     'goodsName' => 'XXXXXX', //商品名稱
-    'payResult' => 'XX', // 支付狀態,00表示成功
+    'payResult' => 'XX', // 支付狀態，00 表示成功
     'payDate' => , // 支付時間，格式：yyyyMMddHHmmss
-    'sign' => '1C1E6B6DCD8DC9F70565AFXXXXXXXXXX', // 簽名(字母大寫)
+    'sign' => '1C1E6B6DCD8DC9F70565AFXXXXXXXXXX', // 簽名（字母大寫）
 ]
 ```
 
@@ -75,26 +75,26 @@ Post Data:
 $merchantId = 'XXXXXXXXXXXXXXX'; // 商家號
 $secretKey = 'XXXXXXXXXXXXXXX'; // md5 密鑰
 $merchantPrivateKey = '-----BEGIN RSA PRIVATE KEY-----XXXXXXXXXX-----BEGIN RSA PRIVATE KEY-----' //RSA密鑰
-$merchantPayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
+$gatewayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
 
 $tradeNo = '20180109023351XXXXX'; // 商家產生的唯一訂單號
 $channel = Channel::WECHAT; // 支付通道，支援微信支付、QQ錢包、支付寶
 $amount = 1.00; // 消費金額 (元)
-$payDate = //支付時間，格式：yyyyMMddHHmmss
+$payDate = // 支付時間，格式：yyyy-MM-dd
 ```
 ```
-$tradeQuery = new TradeQuery($merchantId, $secretKey, merchantPrivateKey, merchantPayPublicKey);
+$tradeQuery = new TradeQuery($merchantId, $secretKey, $merchantPrivateKey, $gatewayPublicKey);
 $result = $tradeQuery->find($tradeNo, $channel, $amount, $payDate);
 ```
 ```
 Result:
 [
     'merNo' => 'XXXXXXXXXXXXXXX', // 商家號
-    'msg' => 'XXXX'; // 狀態描述
-    'stateCode' => 'XX', // 00表示成功
+    'msg' => '查询成功'; // 狀態描述
+    'stateCode' => 'XX', // 00 表示成功
     'orderNum' =>'20180109023351XXXXX', // 商家產生的唯一訂單號
-    'payStateCode' => 'XX', // 支付狀態 00:支付成功 01:支付失敗 03:簽名錯誤 04:其他錯誤 05:未知 06:初始 50:網絡異常 99:未支付
-    'sign' => '1C1E6B6DCD8DC9F70565AFXXXXXXXXXX', // 簽名(字母大寫)
+    'payStateCode' => 'XX', // 支付狀態 00 支付成功、01 支付失敗、03 簽名錯誤、04 其他錯誤、05 未知、06 初始、50 網絡異常、99 未支付
+    'sign' => '1C1E6B6DCD8DC9F70565AFXXXXXXXXXX', // 簽名（字母大寫）
 ]
 ```
 
@@ -106,12 +106,12 @@ Result:
 $merchantId = 'XXXXXXXXXXXXXXX'; // 商家號
 $secretKey = 'XXXXXXXXXXXXXXX'; // md5 密鑰
 $merchantPrivateKey = '-----BEGIN RSA PRIVATE KEY-----XXXXXXXXXX-----BEGIN RSA PRIVATE KEY-----' //RSA密鑰
-$merchantPayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
+$gatewayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
 
 $tradeNo = '20180109023351XXXXX'; // 商家產生的唯一訂單號
 ```
 ```
-$tradeQuery = new TradeQuery($merchantId, $secretKey, merchantPrivateKey, merchantPayPublicKey);
+$tradeQuery = new TradeQuery($merchantId, $secretKey, $merchantPrivateKey, $gatewayPublicKey);
 $result = $tradeQuery->isPaid($tradeNo, $channel, $amount, $payDate);
 ```
 ```
