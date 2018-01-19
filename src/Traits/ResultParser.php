@@ -17,15 +17,20 @@ trait ResultParser
     {
         $result = json_decode($response, true);
 
-        if ($result['stateCode'] === '00') {
+        if (isset($result['sign'])) {
             $signature = $result['sign'];
             unset($result['sign']);
 
             if (!Signature::validate($result, $secretKey, $signature)) {
-                $response = '{"stateCode": "03", "msg": "签名错误"}';
+                return [
+                    'stateCode' => '03',
+                    'msg'       => '签名错误',
+                ];
             }
+
+            $result['sign'] = $signature;
         }
 
-        return json_decode($response, true);
+        return $result;
     }
 }

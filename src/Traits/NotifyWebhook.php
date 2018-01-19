@@ -12,12 +12,12 @@ trait NotifyWebhook
     /**
      * Verify notify request's signature.
      *
-     * @param $payload
-     * @param $privateKey
-     * @param $secretKey
+     * @param array $payload
+     * @param string $secretKey
+     * @param string $privateKey
      * @return bool
      */
-    public function verifyNotifyPayload($payload, $privateKey, $secretKey)
+    public function verifyNotifyPayload(array $payload, $secretKey, $privateKey)
     {
         if (!isset($payload['data'])) {
             return false;
@@ -34,12 +34,12 @@ trait NotifyWebhook
     /**
      * Verify notify request's signature and parse payload.
      *
-     * @param $payload
-     * @param $privateKey
-     * @param $secretKey
+     * @param array $payload
+     * @param string $secretKey
+     * @param string $privateKey
      * @return array|null
      */
-    public function parseNotifyPayload($payload, $privateKey, $secretKey)
+    public function parseNotifyPayload(array $payload, $secretKey, $privateKey)
     {
         if (!isset($payload['data'])) {
             return null;

@@ -89,7 +89,7 @@ class UnitTest extends TestCase
             'orderNum' => '20170812104118797WlN',
         ];
 
-        $this->assertTrue($mock->verifyNotifyPayload($payload, $this->merchantPrivateKey, $this->secretKey));
+        $this->assertTrue($mock->verifyNotifyPayload($payload, $this->secretKey, $this->merchantPrivateKey));
     }
 
     public function testNotifyWebhookParseNotifyPayload()
@@ -102,7 +102,7 @@ class UnitTest extends TestCase
             'orderNum' => '20170812104118797WlN',
         ];
 
-        $this->assertEquals('00', $mock->parseNotifyPayload($payload, $this->merchantPrivateKey, $this->secretKey)['payResult']);
+        $this->assertEquals('00', $mock->parseNotifyPayload($payload, $this->secretKey, $this->merchantPrivateKey)['payResult']);
     }
 
     public function testNotifyWebhookSuccessNotifyResponse()
