@@ -15,7 +15,7 @@ class Payment
     /**
      * @var string
      */
-    protected $merchantNo;
+    protected $merchantId;
 
     /**
      * @var string
@@ -53,7 +53,7 @@ class Payment
      */
     protected function __construct($merchantId, $secretKey, $privateKey, $publicKey, $baseApiUrl)
     {
-        $this->merchantNo = $merchantId;
+        $this->merchantId = $merchantId;
         $this->secretKey = $secretKey;
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
@@ -64,17 +64,16 @@ class Payment
      * Sign request payload.
      *
      * @param array $payload
-     * @param string $publicKey
      * @return string
      */
-    protected function signPayload(array $payload, $publicKey)
+    protected function signPayload(array $payload)
     {
-        $payload['merNo'] = $this->merchantNo;
+        $payload['merNo'] = $this->merchantId;
         $payload['goodsName'] = self::GOODS_NAME;
         $payload['sign'] = Signature::generate($payload, $this->secretKey);
 
-        $data = RsaCrypt::encrypt($payload, $publicKey);
+        $data = RsaCrypt::encrypt($payload, $this->publicKey);
 
-        return 'data='.$data.'&merchNo='.$this->merchantNo.'&version='.self::API_VERSION;
+        return 'data='.$data.'&merchNo='.$this->merchantId.'&version='.self::API_VERSION;
     }
 }

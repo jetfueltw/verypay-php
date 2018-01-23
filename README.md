@@ -21,16 +21,16 @@ $merchantId = 'XXXXXXXXXXXXXXX'; // 商家號
 $secretKey = 'XXXXXXXXXXXXXXX'; // md5 密鑰
 $merchantPrivateKey = '-----BEGIN RSA PRIVATE KEY-----XXXXXXXXXX-----BEGIN RSA PRIVATE KEY-----' //RSA密鑰
 $gatewayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
+
 $tradeNo = '20180109023351XXXXX'; // 商家產生的唯一訂單號
 $channel = Channel::ALIPAY; // 支付通道，支援微信支付、QQ錢包、支付寶、京東支付、銀聯、百度錢包
 $amount = 1.00; // 消費金額 (元)
-$clientIp = 'XXX.XXX.XXX.XXX'; // 消費者端 IP 位址
 $notifyUrl = 'https://XXX.XXX.XXX'; // 交易完成後異步通知接口
 $returnUrl = 'https://XXX.XXX.XXX'; // 交易完成後會跳轉到這個頁面
 ```
 ```
 $payment = new DigitalPayment($merchantId, $secretKey, $merchantPrivateKey, $gatewayPublicKey);
-$result = $payment->order($tradeNo, $channel, $amount, $clientIp, $notifyUrl, $returnUrl);
+$result = $payment->order($tradeNo, $channel, $amount, $notifyUrl, $returnUrl);
 ```
 ```
 Result:
@@ -78,7 +78,7 @@ $merchantPrivateKey = '-----BEGIN RSA PRIVATE KEY-----XXXXXXXXXX-----BEGIN RSA P
 $gatewayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
 
 $tradeNo = '20180109023351XXXXX'; // 商家產生的唯一訂單號
-$channel = Channel::WECHAT; // 支付通道，支援微信支付、QQ錢包、支付寶
+$channel = Channel::ALIPAY; // 支付通道，支援微信支付、QQ錢包、支付寶
 $amount = 1.00; // 消費金額 (元)
 $payDate = // 支付時間，格式：yyyy-MM-dd
 ```
@@ -109,6 +109,9 @@ $merchantPrivateKey = '-----BEGIN RSA PRIVATE KEY-----XXXXXXXXXX-----BEGIN RSA P
 $gatewayPublicKey = '-----BEGIN PUBLIC KEY-----XXXXXXXXXX-----BEGIN PUBLIC KEY-----' //RSA公鑰
 
 $tradeNo = '20180109023351XXXXX'; // 商家產生的唯一訂單號
+$channel = Channel::ALIPAY; // 支付通道，支援微信支付、QQ錢包、支付寶
+$amount = 1.00; // 消費金額 (元)
+$payDate = // 支付時間，格式：yyyy-MM-dd
 ```
 ```
 $tradeQuery = new TradeQuery($merchantId, $secretKey, $merchantPrivateKey, $gatewayPublicKey);

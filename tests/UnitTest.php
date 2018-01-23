@@ -33,12 +33,11 @@ class UnitTest extends TestCase
         $tradeNo = date('YmdHis').rand(1000, 9999);
         $channel = Channel::ALIPAY;
         $amount = 1;
-        $clientIp = $faker->ipv4;
         $notifyUrl = $faker->url;
         $returnUrl = $faker->url;
 
         $payment = new DigitalPayment($this->merchantId, $this->secretKey, $this->merchantPrivateKey, $this->gatewayPublicKey, 'http://139.199.195.194:8080/');
-        $result = $payment->order($tradeNo, $channel, $amount, $clientIp, $notifyUrl, $returnUrl);
+        $result = $payment->order($tradeNo, $channel, $amount, $notifyUrl, $returnUrl);
 
         $this->assertEquals('00', $result['stateCode']);
 

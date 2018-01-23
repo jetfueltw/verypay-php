@@ -33,12 +33,11 @@ class DigitalPayment extends Payment
      * @param string $tradeNo
      * @param string $channel
      * @param float $amount
-     * @param string $clientIp
      * @param string $notifyUrl
      * @param string $returnUrl
      * @return array
      */
-    public function order($tradeNo, $channel, $amount, $clientIp, $notifyUrl, $returnUrl)
+    public function order($tradeNo, $channel, $amount, $notifyUrl, $returnUrl)
     {
         if ($this->baseApiUrl === null) {
             $this->baseApiUrl = BaseUrl::DIGITAL_PAYMENT[$channel];
@@ -55,7 +54,7 @@ class DigitalPayment extends Payment
             'callBackViewUrl' => $returnUrl,
             'version'         => self::API_VERSION,
             'charset'         => self::CHARSET,
-        ], $this->publicKey);
+        ]);
 
         return $this->parseResponse($this->httpClient->post('api/pay.action', $payload), $this->secretKey);
     }
