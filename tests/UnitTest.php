@@ -31,7 +31,7 @@ class UnitTest extends TestCase
     {
         $faker = Factory::create();
         $tradeNo = date('YmdHis').rand(1000, 9999);
-        $channel = Channel::ALIPAY;
+        $channel = Channel::WECHAT;
         $amount = 1;
         $notifyUrl = $faker->url;
         $returnUrl = $faker->url;
@@ -51,7 +51,7 @@ class UnitTest extends TestCase
      */
     public function testDigitalPaymentOrderFind($tradeNo)
     {
-        $channel = Channel::ALIPAY;
+        $channel = Channel::WECHAT;
         $amount = 1;
         $payDate = date('Y-m-d');
 
@@ -68,7 +68,7 @@ class UnitTest extends TestCase
      */
     public function testDigitalPaymentOrderIsPaid($tradeNo)
     {
-        $channel = Channel::ALIPAY;
+        $channel = Channel::WECHAT;
         $amount = 1;
         $payDate = date('Y-m-d');
 
@@ -88,7 +88,7 @@ class UnitTest extends TestCase
             'orderNum' => '20170812104118797WlN',
         ];
 
-        $this->assertTrue($mock->verifyNotifyPayload($payload, $this->secretKey, $this->merchantPrivateKey));
+        $this->assertTrue($mock->verifyNotifyPayload($payload, $this->secretKey, $this->merchantPrivateKey, true));
     }
 
     public function testNotifyWebhookParseNotifyPayload()
@@ -101,7 +101,7 @@ class UnitTest extends TestCase
             'orderNum' => '20170812104118797WlN',
         ];
 
-        $this->assertEquals('00', $mock->parseNotifyPayload($payload, $this->secretKey, $this->merchantPrivateKey)['payResult']);
+        $this->assertEquals('00', $mock->parseNotifyPayload($payload, $this->secretKey, $this->merchantPrivateKey, true)['payResult']);
     }
 
     public function testNotifyWebhookSuccessNotifyResponse()

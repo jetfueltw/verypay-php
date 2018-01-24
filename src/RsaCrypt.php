@@ -26,11 +26,16 @@ class RsaCrypt
     /**
      * @param string $data
      * @param string $privateKey
+     * @param bool $urlDecode
      * @return array
      */
-    public static function decrypt($data, $privateKey)
+    public static function decrypt($data, $privateKey, $urlDecode)
     {
-        $data = base64_decode(urldecode($data));
+        if ($urlDecode) {
+            $data = urldecode($data);
+        }
+
+        $data = base64_decode($data);
         $privateKey = openssl_get_privatekey($privateKey);
 
         $decryptData = '';
